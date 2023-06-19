@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="max_gridview_height">100dp</dimen>
+    <dimen name="gridview_item_height">30dp</dimen>
+    <dimen name="gridview_item_width">100dp</dimen>
+
+</resources>

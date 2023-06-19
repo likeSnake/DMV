@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ASMSmaliIdeaPluginConfiguration">
+    <asm skipDebug="true" skipFrames="true" skipCode="false" expandFrames="false" />
+    <groovy codeStyle="LEGACY" />
+  </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/at_sharp.xml" value="0.2365" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/bt_sharp.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/correct_sharp.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/end_shape.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/et_sharp.xml" value="0.232" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/grid_sharp_white.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2385" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/incorrect_sharp.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/main_sharp.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/next_sharp.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/radius20.xml" value="0.2385" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/restart_sharp.xml" value="0.2295" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/shape.xml" value="0.2385" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/sharp_chosen.xml" value="0.2385" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/sharp_qian_white.xml" value="0.2385" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/sharp_white.xml" value="0.2385" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/state_next.xml" value="0.232" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/state_no_sharp.xml" value="0.232" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/test_sharp.xml" value="0.2385" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/test_true_grid.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/test_true_sharp.xml" value="0.232" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/text_sharp.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/toPass_sharp.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/to_sharp.xml" value="0.232" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable-v24/yes_sharp.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable/dialog_shape.xml" value="0.233" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/drawable/ic_choose_yes.xml" value="0.2385" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/act_car_type.xml" value="0.3541666666666667" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/act_district.xml" value="0.3686594202898551" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/act_main.xml" value="0.33" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/act_start.xml" value="0.36367753623188404" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/act_testing.xml" value="0.33" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/dialog_end.xml" value="0.3541666666666667" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/dialog_simple.xml" value="0.3541666666666667" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/item_bottom.xml" value="0.3686594202898551" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/item_grid.xml" value="0.3541666666666667" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/item_state.xml" value="0.33" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/item_tests.xml" value="0.3686594202898551" />
+        <entry key="..\:/code/WorkProject/DMV/app/src/main/res/layout/item_topic.xml" value="0.3686594202898551" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
