@@ -44,6 +44,7 @@ import net.ncie.dmv.bean.QuestionsBean;
 import net.ncie.dmv.util.HttpUtils;
 import net.ncie.dmv.util.MessageEvent;
 import net.ncie.dmv.util.MyUtil;
+import net.ncie.dmv.util.TimerUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -91,6 +92,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
     private ArrayList<String> state_list;
     private int SelectedPosition;
     private Button start_test;
+    private TimerUtil t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,23 +249,41 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
     }
 
     public void changeLeftTop(){
-        myEvent = "left";
-        if (state_list!=null) {
-            topicAdapter.setList(state_list);
-            topicAdapter.setSelectedPosition(LeftSelectItem);
-            bottomSheetDialog.show();
+        if (!bottomSheetDialog.isShowing()) {
+            myEvent = "left";
+            if (state_list != null) {
+                topicAdapter.setList(state_list);
+                topicAdapter.setSelectedPosition(LeftSelectItem);
 
+                bottomSheetDialog.show();
+
+            }
         }
+    }
+    public void startTimer(){
+        t = new TimerUtil(10, 1, new TimerUtil.TimerListener() {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                //allStartAct();
+                changeLeftTop();
+            }
+        });
+        t.start();
     }
     public void startInterstitialAd(){
         dialog.show();
-
+        startTimer();
         if (Interstitial_Ad_Switch&&All_Ad_Switch) {
             InterstitialAds.startAd(this, new App.OnShowAdCompleteListener() {
                 @Override
                 public void onShowAdComplete() {
                     dialog.dismiss();
-
+                    t.cancel();
                     //广告显示
                     //  isShow = true;
                     MyUtil.MyLog("广告显示成功");
@@ -278,16 +298,25 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
 
                 @Override
                 public void onFailedToLoad() {
-
+                    MyUtil.MyLog("开屏广告加载失败");
+                    t.cancel();
+                    dialog.dismiss();
+                    changeLeftTop();
                 }
 
                 @Override
                 public void onAdFailedToShow() {
-
+                    MyUtil.MyLog("开屏广告显示失败");
+                    t.cancel();
+                    dialog.dismiss();
+                    changeLeftTop();
                 }
             });
         }else {
             MyUtil.MyLog("插屏免广告");
+            t.cancel();
+            dialog.dismiss();
+            changeLeftTop();
         }
 
     }

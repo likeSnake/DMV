@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">2023 DMV TEST</string>
+
+    <string name="facebook_app_token">643575e7b71df152f6f8a63dc49779ad</string>
+    <string name="facebook_app_id">552455512601034</string>
 </resources>

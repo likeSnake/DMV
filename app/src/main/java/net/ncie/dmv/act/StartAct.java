@@ -72,12 +72,16 @@ public class StartAct extends AppCompatActivity {
 
             @Override
             public void onFailedToLoad() {
-
+                MyUtil.MyLog("开屏广告加载失败");
+                isReadyOpenAd = true;
+                startAct();
             }
 
             @Override
             public void onAdFailedToShow() {
-
+                MyUtil.MyLog("开屏广告显示失败");
+                isReadyOpenAd = true;
+                startAct();
             }
         });
 
@@ -85,6 +89,14 @@ public class StartAct extends AppCompatActivity {
 
     }
     public void initDate(){
+        if(MMKV.defaultMMKV().decodeString(SelectState)!=null&&MMKV.defaultMMKV().decodeString(SelectCar)!=null){
+            //   startMain();
+            isMain = true;
+        }else {
+            //   startDistrictAct();
+            isMain = false;
+        }
+
         getState();
 
         t = new TimerUtil(10, 1, new TimerUtil.TimerListener() {
@@ -95,7 +107,7 @@ public class StartAct extends AppCompatActivity {
 
            @Override
            public void onFinish() {
-               startAct();
+               allStartAct();
            }
        });
         t.start();
@@ -125,6 +137,8 @@ public class StartAct extends AppCompatActivity {
                            // MMKV.defaultMMKV().encode(MY_FIRE_BASE_TEST_VPN_SERVERS, DEFAULT_SERVERS);
 
                         }
+
+                        MyUtil.MyLog("FireBase已配置");
                         isReadyFireBase = true;
                         startAct();
                         if (t!=null){
@@ -143,14 +157,7 @@ public class StartAct extends AppCompatActivity {
                 list = result;
                 runOnUiThread(()->{
                     MMKV.defaultMMKV().encode(AllState, new Gson().toJson(result));
-                    if(MMKV.defaultMMKV().decodeString(SelectState)!=null&&MMKV.defaultMMKV().decodeString(SelectCar)!=null){
-                     //   startMain();
-                        isMain = true;
-                    }else {
-                     //   startDistrictAct();
-                        isMain = false;
-                    }
-
+                    MyUtil.MyLog("State已获取");
                     isReadyState = true;
                     startAct();
                 });
@@ -182,6 +189,17 @@ public class StartAct extends AppCompatActivity {
         }
     }
 
+    public void allStartAct(){
+        if (isMain) {
+            startActivity(new Intent(StartAct.this, MainAct.class));
+        } else {
+            Intent intent = new Intent(StartAct.this, DistrictAct.class);
+            intent.putExtra("getState", list);
+            startActivity(intent);
+        }
+        finish();
+    }
+
     public void startOpenAd(){
         if (Open_Ad_Switch&&All_Ad_Switch){
             //开屏广告初始化并显示
@@ -189,7 +207,7 @@ public class StartAct extends AppCompatActivity {
             appOpenAdManager.showAdIfAvailable();
         }else {
             //免广告
-
+            MyUtil.MyLog("开屏广告免广告");
         }
     }
 }

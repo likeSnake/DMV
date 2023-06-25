@@ -56,6 +56,7 @@ import net.ncie.dmv.bean.TopicBean;
 import net.ncie.dmv.util.HttpUtils;
 import net.ncie.dmv.util.MessageEvent;
 import net.ncie.dmv.util.MyUtil;
+import net.ncie.dmv.util.TimerUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -130,6 +131,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     private Button restart;
     private LinearLayout buttons;
     private FrameLayout ads_main_native;
+    private TimerUtil t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -692,13 +694,31 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     }
 
     public void changeLeftTop(){
-        myEvent = "left";
-        if (state_list!=null) {
-            topicAdapter.setList(state_list);
-            topicAdapter.setSelectedPosition(LeftSelectItem);
-            bottomSheetDialog.show();
+        if (!bottomSheetDialog.isShowing()) {
+            myEvent = "left";
+            if (state_list != null) {
+                topicAdapter.setList(state_list);
+                topicAdapter.setSelectedPosition(LeftSelectItem);
+                bottomSheetDialog.show();
 
+            }
         }
+    }
+
+    public void startTimer(){
+        t = new TimerUtil(10, 1, new TimerUtil.TimerListener() {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                //allStartAct();
+                changeLeftTop();
+            }
+        });
+        t.start();
     }
     public void startInterstitialAd(boolean isLeft){
         dialog.show();
@@ -727,16 +747,20 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                 public void onFailedToLoad() {
                     //广告加载失败
                     dialog.dismiss();
+                    changeLeftTop();
                 }
 
                 @Override
                 public void onAdFailedToShow() {
                     //广告显示失败
                     dialog.dismiss();
+                    changeLeftTop();
                 }
             });
         }else {
             MyUtil.MyLog("插屏免广告");
+            dialog.dismiss();
+            changeLeftTop();
         }
 
     }
