@@ -19,7 +19,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="70dp"
-                app:indicatorColor="#5DE81D"/>
+                app:indicatorColor="#8acce2"/>
 
 
 

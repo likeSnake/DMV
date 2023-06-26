@@ -97,6 +97,8 @@
                 android:layout_height="match_parent"
                 android:text="Test 1"
                 android:gravity="center"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textColor="@color/black"
                 android:layout_toStartOf="@+id/test_spinner"
                 android:layout_centerVertical="true"/>
@@ -322,139 +324,158 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/topic__relativeLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
+        android:layout_height="match_parent"
         android:layout_below="@+id/test_relativeLayout2"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
-        android:background="@drawable/sharp_qian_white"
-        android:visibility="visible">
+        android:orientation="vertical">
 
-
-        <TextView
-            android:id="@+id/test_title"
+        <ScrollView
+            android:id="@+id/topic_scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="4.  You need to use extra caution when driving near a pedestrian using a white cane because:"
-            android:textColor="@color/black"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:layout_height="0dp"
+            android:layout_weight="1.3"
+            android:background="@drawable/sharp_acroll_white"
+            >
+
+            <!-- 在这里添加您要滚动的内容 -->
+            <RelativeLayout
+                android:id="@+id/topic__relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sharp_qian_white"
+                android:visibility="visible">
 
 
-        <RelativeLayout
-            android:id="@+id/relativeLayout_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/test_title"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp">
-
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/loadings"
-                style="@style/AVLoadingIndicatorView"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:visibility="gone"
-                app:indicatorColor="#7399CF"
-                app:indicatorName="LineSpinFadeLoaderIndicator" />
-
-            <ImageView
-                android:id="@+id/test_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/jiaot"
-                android:visibility="gone" />
-
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/test_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="4.  You need to use extra caution when driving near a pedestrian using a white cane because:"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/test_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/relativeLayout_image"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp" />
+                <RelativeLayout
+                    android:id="@+id/relativeLayout_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/test_title"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp">
+
+                    <com.wang.avi.AVLoadingIndicatorView
+                        android:id="@+id/loadings"
+                        style="@style/AVLoadingIndicatorView"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:visibility="gone"
+                        app:indicatorColor="#7399CF"
+                        app:indicatorName="LineSpinFadeLoaderIndicator" />
+
+                    <ImageView
+                        android:id="@+id/test_image"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/jiaot"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
 
 
-        <TextView
-            android:id="@+id/prompts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/test_recyclerview"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:text="correctly !"
-            android:textColor="#84CD46"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/test_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relativeLayout_image"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp" />
 
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/prompts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/test_recyclerview"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:text="correctly !"
+                    android:textColor="#84CD46"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@+id/topic__relativeLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp">
+
+            </RelativeLayout>
+        </ScrollView>
+
+
 
         <LinearLayout
+            android:id="@+id/buttons"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/previous"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="previous"
-                android:visibility="gone"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="20dp"
-                android:textColor="#222222"
-                android:background="@drawable/pr_sharp" />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/next_test"
-                android:layout_width="0dp"
+                <Button
+                    android:id="@+id/previous"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="previous"
+                    android:visibility="gone"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:textColor="#222222"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/pr_sharp" />
+
+                <Button
+                    android:id="@+id/next_test"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Next"
+                    android:textSize="19sp"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:visibility="visible"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/next_sharp" />
+            </LinearLayout>
+
+
+            <FrameLayout
+                android:id="@+id/ads_main_native"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Next"
-                android:textSize="19sp"
-                android:textColor="@color/white"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                
-                android:visibility="visible"
-                android:background="@drawable/next_sharp" />
+
+                android:layout_marginTop="10dp"
+
+                />
+
         </LinearLayout>
 
 
-
-
-        <FrameLayout
-            android:id="@+id/ads_main_native"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-
-            />
-
     </LinearLayout>
+
+
+
 
 
     <Button

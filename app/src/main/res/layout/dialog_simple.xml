@@ -11,6 +11,6 @@
         app:indicatorName="LineSpinFadeLoaderIndicator"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        app:indicatorColor="#5DE81D"/>
+        app:indicatorColor="#8acce2"/>
 
 </RelativeLayout>

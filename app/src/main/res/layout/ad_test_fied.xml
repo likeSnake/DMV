@@ -31,9 +31,7 @@
                     <com.google.android.gms.ads.nativead.MediaView
                         android:id="@+id/ad_media"
                         android:layout_width="200dp"
-                        android:layout_height="110dp"
-
-                        android:layout_marginTop="5dp" />
+                        android:layout_height="110dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -46,7 +44,8 @@
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/ads_sharp"
-                            android:textSize="12sp" />
+                            android:textColor="@color/white"
+                            android:textSize="15sp" />
                     </LinearLayout>
 
 
@@ -101,6 +100,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="20dp"
                             android:layout_marginEnd="20dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
                             android:textSize="12sp" />
                     </LinearLayout>
 

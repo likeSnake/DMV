@@ -50,6 +50,7 @@ public class InterstitialAds {
                 new InterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        //广告已加载完毕
 
                         mInterstitialAd = interstitialAd;
 
@@ -73,18 +74,19 @@ public class InterstitialAds {
                                 //预加载广告
                            //     initInterstitialAds(context);
                                 onShowAdCompleteListeners.TurnoffAds();
-
+                                mInterstitialAd = null;
                             }
 
                             @Override
                             public void onAdFailedToShowFullScreenContent(AdError adError) {
                                 // 广告显示失败
-                                MyUtil.MyLog("广告显示失败");
+                                MyUtil.MyLog("广告显示失败："+adError);
 
                                 onShowAdCompleteListeners.onAdFailedToShow();
                                 //isConnecting = false;
                                 //重新加载广告
                              //   initInterstitialAds(context);
+                                mInterstitialAd = null;
                             }
 
                             @Override
@@ -101,6 +103,8 @@ public class InterstitialAds {
                                 isInitInterstitialShow = true;
                             }
                         });
+
+                        mInterstitialAd.show((Activity) context);
                     }
 
                     @Override
@@ -108,6 +112,7 @@ public class InterstitialAds {
                         MyUtil.MyLog("广告加载失败:"+loadAdError);
                       //  initInterstitialAds(context);
                         onShowAdCompleteListeners.onFailedToLoad();
+                        mInterstitialAd = null;
                     }
                 });
     }

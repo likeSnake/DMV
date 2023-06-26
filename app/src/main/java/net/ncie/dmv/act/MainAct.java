@@ -93,6 +93,8 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
     private int SelectedPosition;
     private Button start_test;
     private TimerUtil t;
+    private boolean isAds = false;
+    private boolean isTests = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +108,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
         initLoading();
         initUI();
         initData();
-        getTests();
+        getTests(true);
         initListener();
     }
     public void initUI(){
@@ -169,7 +171,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                 MMKV.defaultMMKV().encode(SelectCar,car_list.get(selectCar));
 
                 MyUtil.MyLog(selectCar);
-                getTests();
+                getTests(false);
              //   updateImageCar();
                 break;
 
@@ -185,7 +187,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                 MMKV.defaultMMKV().encode(SelectCar,car_list.get(selectCar));
 
                 MyUtil.MyLog(selectCar);
-                getTests();
+                getTests(false);
             //    updateImageCar();
                 break;
 
@@ -197,13 +199,16 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                            selectCar = SelectedPosition;
                            MMKV.defaultMMKV().encode(SelectCar,car_list.get(SelectedPosition));
                            MMKV.defaultMMKV().encode(SelectMiddleItems,String.valueOf(SelectedPosition));
-                           getTests();
+                           getTests(false);
                        }
                         break;
                     case "right":
                         updateText(false);
                         break;
                     case "left":
+
+                        startInterstitialAd();
+
                         LeftSelectItem = SelectedPosition;
                         MyUtil.MyLog(state+"*-*-*-*-*"+state_list.get(LeftSelectItem));
                         if (!state.equals(state_list.get(LeftSelectItem))) {
@@ -211,7 +216,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                             //selectCar = SelectedPosition
                             MMKV.defaultMMKV().encode(SelectState, state);
                             MMKV.defaultMMKV().encode(SelectLeftItems, String.valueOf(SelectedPosition));
-                            getTests();
+                            getTests(false);
                         }
                 }
 
@@ -236,8 +241,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                 bottomSheetDialog.show();
                 break;
             case R.id.left_top:
-                startInterstitialAd();
-
+                changeLeftTop();
                 break;
             case R.id.start_test:
                 adViewMain = null;
@@ -270,53 +274,56 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void onFinish() {
                 //allStartAct();
-                changeLeftTop();
+                dialog.dismiss();
+
             }
         });
         t.start();
     }
     public void startInterstitialAd(){
-        dialog.show();
         startTimer();
         if (Interstitial_Ad_Switch&&All_Ad_Switch) {
             InterstitialAds.startAd(this, new App.OnShowAdCompleteListener() {
                 @Override
                 public void onShowAdComplete() {
-                    dialog.dismiss();
                     t.cancel();
                     //广告显示
                     //  isShow = true;
                     MyUtil.MyLog("广告显示成功");
+                    isAds = true;
+                    dialogDismiss();
                     CheckAds();
                 }
 
                 @Override
                 public void TurnoffAds() {
                     //关闭广告后
-                    changeLeftTop();
+
                 }
 
                 @Override
                 public void onFailedToLoad() {
                     MyUtil.MyLog("开屏广告加载失败");
                     t.cancel();
-                    dialog.dismiss();
-                    changeLeftTop();
+                    isAds = true;
+                    dialogDismiss();
+
                 }
 
                 @Override
                 public void onAdFailedToShow() {
                     MyUtil.MyLog("开屏广告显示失败");
                     t.cancel();
-                    dialog.dismiss();
-                    changeLeftTop();
+                    isAds = true;
+                    dialogDismiss();
+
                 }
             });
         }else {
             MyUtil.MyLog("插屏免广告");
             t.cancel();
-            dialog.dismiss();
-            changeLeftTop();
+            isAds = true;
+            dialogDismiss();
         }
 
     }
@@ -378,16 +385,17 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
         switch (myEvent){
             case "middle":
                 MiddleSelectItem = SelectedPosition;
+                dialog.dismiss();
                 break;
-            case "right":
-
+            case "image_right":
+                dialog.dismiss();
                 break;
             case "left":
                 LeftSelectItem = SelectedPosition;
                 break;
             case "image_left":
                 MiddleSelectItem = selectCar;
-
+                dialog.dismiss();
                // selectCar = SelectedPosition;
              //   MMKV.defaultMMKV().encode(SelectCar,car_list.get(SelectedPosition));
                 MMKV.defaultMMKV().encode(SelectMiddleItems,String.valueOf(MiddleSelectItem));
@@ -440,8 +448,17 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
+    public void dialogDismiss(){
+        if (dialog!=null){
+            if (isTests&&isAds){
+                dialog.dismiss();
+                isTests = false;
+                isAds = false;
+            }
+        }
+    }
 
-    public void getTests(){
+    public void getTests(boolean isTrue){
         dialog.show();
         car = car_list.get(selectCar);
         MyUtil.MyLog(car_list.get(selectCar));
@@ -464,9 +481,13 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                             MyUtil.MyToast(MainAct.this,"The question bank is empty");
                             initBottomSheet(title_list);
                             setData();
-
                         }
-                        dialog.dismiss();
+                        if (isTrue){
+                            dialog.dismiss();
+                        }else {
+                            isTests = true;
+                            dialogDismiss();
+                        }
                     });
 
 
@@ -477,7 +498,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                     Log.e("GetRequestWithParams","请求失败："+e);
                     runOnUiThread(()-> {
                         //再次请求
-                        getTests();
+                        getTests(false);
                    //     dialog.dismiss();
                     });
                 }

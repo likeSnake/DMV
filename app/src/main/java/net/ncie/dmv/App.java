@@ -59,7 +59,7 @@ public class App extends Application
       //  initAds();
 
 
-        InterstitialAds.initInterstitialAds(this);
+       // InterstitialAds.initInterstitialAds(this);
 
         MobileAds.initialize(
                 this,

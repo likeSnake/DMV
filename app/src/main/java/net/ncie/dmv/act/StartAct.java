@@ -18,9 +18,6 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.installations.Utils;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
 import com.tencent.mmkv.MMKV;
 
@@ -42,7 +39,6 @@ public class StartAct extends AppCompatActivity {
     private boolean isMain = true;
     private ArrayList<String> list;
     private TimerUtil t;
-    private boolean isReadyFireBase = false;
     private boolean isReadyState = false;
     private boolean isReadyOpenAd = false;
     private OpenAds appOpenAdManager;
@@ -51,7 +47,6 @@ public class StartAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_start);
         initDate();
-        initFireBase();
         initAds();
     }
 
@@ -112,42 +107,6 @@ public class StartAct extends AppCompatActivity {
        });
         t.start();
     }
-    public void initFireBase(){
-        FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
-
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setMinimumFetchIntervalInSeconds(0)
-                .build();
-        remoteConfig.setConfigSettingsAsync(configSettings);
-
-
-        remoteConfig.fetchAndActivate()
-                .addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Boolean> task) {
-                        if (task.isSuccessful()) {
-                            MyUtil.MyLog("远程配置成功");
-                            remoteConfig.activate();
-                            String server = remoteConfig.getString(My_Firebase_AdConfig);
-                            MMKV.defaultMMKV().encode(My_Firebase_AdConfig, server);
-
-
-                        }else {
-                            MyUtil.MyLog("远程配置失败,采用默认配置");
-                           // MMKV.defaultMMKV().encode(MY_FIRE_BASE_TEST_VPN_SERVERS, DEFAULT_SERVERS);
-
-                        }
-
-                        MyUtil.MyLog("FireBase已配置");
-                        isReadyFireBase = true;
-                        startAct();
-                        if (t!=null){
-                            t.cancel();
-                        }
-                    }
-                });
-    }
-
     public void getState(){
 
         HttpUtils.sendGetRequest(SelectStateUrl, new HttpUtils.HttpCallback<ArrayList<String>>() {
@@ -177,7 +136,7 @@ public class StartAct extends AppCompatActivity {
     }
 
     public void startAct() {
-        if (isReadyState && isReadyFireBase&&isReadyOpenAd) {
+        if (isReadyState&&isReadyOpenAd) {
             if (isMain) {
                 startActivity(new Intent(StartAct.this, MainAct.class));
             } else {
@@ -207,7 +166,10 @@ public class StartAct extends AppCompatActivity {
             appOpenAdManager.showAdIfAvailable();
         }else {
             //免广告
-            MyUtil.MyLog("开屏广告免广告");
+            MyUtil.MyLog("开屏免广告");
+            t.cancel();
+            isReadyOpenAd = true;
+            startAct();
         }
     }
 }

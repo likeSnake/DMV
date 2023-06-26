@@ -132,6 +132,9 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     private LinearLayout buttons;
     private FrameLayout ads_main_native;
     private TimerUtil t;
+    private boolean isAds = false;
+    private boolean isTestReady = false;
+    private boolean isAdReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -337,8 +340,19 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
 
         current_topic.setText(String.valueOf((currentTest+1)));
         startGrid(grid_list);
-        dialog.dismiss();
-
+        if (isAds) {
+            isTestReady = true;
+            dialogDismiss(false);
+        }else {
+            isAds = false;
+        }
+        switch (myEvent){
+            case "middle":
+            case "image_right":
+            case "image_left":
+                dialog.dismiss();
+                break;
+        }
     }
 
     public void setNumText(){
@@ -363,12 +377,18 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     }
     public void initAds(){
         //加载原生横幅广告
-        NativeAds.refreshMainNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
-            @Override
-            public void onShowNativeAdComplete() {
-                EventBus.getDefault().post(new MessageEvent("NativeAds"));
-            }
-        });
+        if (All_Ad_Switch&&Native_main_Ad_Switch) {
+            NativeAds.refreshMainNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
+                @Override
+                public void onShowNativeAdComplete() {
+                    EventBus.getDefault().post(new MessageEvent("NativeAds"));
+                }
+            });
+        }else {
+            MyUtil.MyLog("NativeAds免广告");
+            ads_main_native.removeAllViews();
+        }
+
     }
 
 
@@ -418,6 +438,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                         correct_count = 0;
                         incorrect_count = 0;
                         setData();
+
+
                     });
 
                 }
@@ -556,7 +578,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                                 currentTest++;
                                 MyUtil.MyLog((currentTest+1)%8);
                                 if ((currentTest+1)%8==0){
-                                    startInterstitialAd(false);
+                                    isAds = true;
+                                    startInterstitialAd(true);
                                   //  startInterstitialAds(this);
                                     initAds();
                                 }
@@ -638,6 +661,9 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                         updateText(false);
                         break;
                     case "left":
+                        isAds = true;
+                        startInterstitialAd(false);
+
                         state = state_list.get(LeftSelectItem);
                         //selectCar = SelectedPosition
                         MMKV.defaultMMKV().encode(SelectState,state);
@@ -667,8 +693,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                 bottomSheetDialog.show();
                 break;
             case R.id.test_left_top:
-                startInterstitialAd(true);
-
+                //startInterstitialAd(true);
+                changeLeftTop();
 
                 break;
             case R.id.previous:
@@ -705,7 +731,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    public void startTimer(){
+    public void startTimer(boolean isSwitch){
         t = new TimerUtil(10, 1, new TimerUtil.TimerListener() {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -715,20 +741,25 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onFinish() {
                 //allStartAct();
-                changeLeftTop();
+                isAdReady = true;
+                dialogDismiss(isSwitch);
             }
         });
         t.start();
     }
-    public void startInterstitialAd(boolean isLeft){
-        dialog.show();
-
+    public void startInterstitialAd(boolean isSwitch){
+        if (isSwitch){
+            dialog.show();
+        }
+        startTimer(isSwitch);
         if (Interstitial_Ad_Switch&&All_Ad_Switch) {
             InterstitialAds.startAd(this, new App.OnShowAdCompleteListener() {
                 @Override
                 public void onShowAdComplete() {
-                    dialog.dismiss();
 
+                    t.cancel();
+                    isAdReady = true;
+                    dialogDismiss(isSwitch);
                     //广告显示
                     //  isShow = true;
                     MyUtil.MyLog("广告显示成功");
@@ -738,29 +769,31 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                 @Override
                 public void TurnoffAds() {
                     //关闭广告后
-                    if (isLeft) {
-                        changeLeftTop();
-                    }
+
                 }
 
                 @Override
                 public void onFailedToLoad() {
                     //广告加载失败
-                    dialog.dismiss();
-                    changeLeftTop();
+                    t.cancel();
+                    isAdReady = true;
+                    dialogDismiss(isSwitch);
+
                 }
 
                 @Override
                 public void onAdFailedToShow() {
                     //广告显示失败
-                    dialog.dismiss();
-                    changeLeftTop();
+                    t.cancel();
+                    isAdReady = true;
+                    dialogDismiss(isSwitch);
                 }
             });
         }else {
             MyUtil.MyLog("插屏免广告");
-            dialog.dismiss();
-            changeLeftTop();
+            t.cancel();
+            isAdReady = true;
+            dialogDismiss(isSwitch);
         }
 
     }
@@ -773,15 +806,15 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
             case "middle":
                 MiddleSelectItem = SelectedPosition;
                 break;
-            case "right":
-
+            case "image_right":
+              //  dialog.dismiss();
                 break;
             case "left":
                 LeftSelectItem = SelectedPosition;
                 break;
             case "image_left":
                 MiddleSelectItem = selectCar;
-
+             //   dialog.dismiss();
                 MMKV.defaultMMKV().encode(SelectMiddleItems,String.valueOf(MiddleSelectItem));
                 break;
         }
@@ -792,6 +825,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
 
             TestId = questionsBeans.get(RightSelectItem).getTest_id();
             getTopic();
+
+
         }else {
             isFirst = true;
             dialog.dismiss();
@@ -799,7 +834,16 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
 
     }
 
-
+    public void dialogDismiss(boolean isSwitch){
+        if (dialog!=null){
+            if ((isTestReady&&isAdReady)||isSwitch){
+                dialog.dismiss();
+                isTestReady = false;
+                isAdReady = false;
+                isAds = false;
+            }
+        }
+    }
     public void updateImageCar(){
         switch (car){
             case "car":
@@ -852,9 +896,6 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ads_main_native.removeAllViews();
-        adViewMain.removeAllViews();
-        adViewMain.destroy();
 
         MyUtil.MyLog("is onDestroy");
     }
