@@ -142,6 +142,9 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_testing);
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(R.color.white));
+
         initLoading();
         initUI();
         initData();
