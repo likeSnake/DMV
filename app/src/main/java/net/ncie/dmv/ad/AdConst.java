@@ -2,14 +2,14 @@ package net.ncie.dmv.ad;
 
 public class  AdConst {
     //正式广告
-    public static final String ADMOB_AD_Native_ID = "ca-app-pub-6544599885867352/4973746921";
+   /* public static final String ADMOB_AD_Native_ID = "ca-app-pub-6544599885867352/4973746921";
     public static final String ADMOB_AD_Open_ID = "ca-app-pub-6544599885867352/1266420291";
-    public static final String ADMOB_AD_Interstitial_ID = "ca-app-pub-6544599885867352/6742656992";
+    public static final String ADMOB_AD_Interstitial_ID = "ca-app-pub-6544599885867352/6742656992";*/
 
     //测试广告
-   /* public static final String ADMOB_AD_Native_ID = "ca-app-pub-3940256099942544/2247696110";
+    public static final String ADMOB_AD_Native_ID = "ca-app-pub-3940256099942544/2247696110";
     public static final String ADMOB_AD_Interstitial_ID = "ca-app-pub-3940256099942544/1033173712";
-    public static final String ADMOB_AD_Open_ID = "ca-app-pub-3940256099942544/3419835294";*/
+    public static final String ADMOB_AD_Open_ID = "ca-app-pub-3940256099942544/3419835294";
 
 
     public static Boolean isStartApp = false;
@@ -27,6 +27,7 @@ public class  AdConst {
     public static int Native_node_Show_Max = 10;
     public static int Native_result_Show_Max = 10;
     public static int Interstitial_Show_Max = 10;
+    public static int Testing_Ad_Interval = 8;
 
     //广告点击最大次数
     public static int All_Clicks_Max = Integer.MAX_VALUE;
@@ -71,4 +72,7 @@ public class  AdConst {
 
     public static String Interstitial_Ad_Impressions = "Interstitial_Ad_Impressions";
     public static String Interstitial_Ad_Clicks = "Interstitial_Ad_Clicks";
+
+
+    public static boolean AppState = true;
 }

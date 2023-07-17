@@ -1,14 +1,42 @@
 package net.ncie.dmv.act;
 
+import static net.ncie.dmv.ad.AdConst.All_Ad_Show_Max;
 import static net.ncie.dmv.ad.AdConst.All_Ad_Switch;
+import static net.ncie.dmv.ad.AdConst.Native_main_Ad_Switch;
+import static net.ncie.dmv.ad.AdConst.Open_Ad_Show_Max;
 import static net.ncie.dmv.ad.AdConst.Open_Ad_Switch;
-import static net.ncie.dmv.ad.AdConst.isStartApp;
+import static net.ncie.dmv.ad.AdConst.Native_main_Show_Max;
+import static net.ncie.dmv.ad.AdConst.Native_node_Show_Max;
+
+import static net.ncie.dmv.ad.AdConst.Native_result_Show_Max;
+import static net.ncie.dmv.ad.AdConst.Interstitial_Show_Max;
+import static net.ncie.dmv.ad.AdConst.All_Clicks_Max;
+import static net.ncie.dmv.ad.AdConst.Open_Clicks_Max;
+import static net.ncie.dmv.ad.AdConst.Native_main_Clicks_Max;
+import static net.ncie.dmv.ad.AdConst.Native_node_Clicks_Max;
+import static net.ncie.dmv.ad.AdConst.Native_result_Clicks_Max;
+import static net.ncie.dmv.ad.AdConst.Interstitial_Clicks_Max;
+import static net.ncie.dmv.ad.AdConst.Testing_Ad_Interval;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_All_Ad_Show_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_All_Clicks_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Interstitial_Clicks_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Interstitial_Show_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_main_Clicks_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_main_Show_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_node_Clicks_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_node_Show_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_result_Clicks_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_result_Show_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Open_Ad_Show_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Open_Clicks_Max;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Testing_Ad_Interval;
 import static net.ncie.dmv.constant.MyAppApiConfig.AllState;
 import static net.ncie.dmv.constant.MyAppApiConfig.My_Firebase_AdConfig;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectCar;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectState;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectStateUrl;
 import static net.ncie.dmv.util.AdUtils.CheckAds;
+import static net.ncie.dmv.util.MyUtil.MyLog;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,14 +46,19 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tencent.mmkv.MMKV;
 
 import net.ncie.dmv.App;
 import net.ncie.dmv.R;
 import net.ncie.dmv.ad.NativeAds;
 import net.ncie.dmv.ad.OpenAds;
+import net.ncie.dmv.bean.AdConfigBean;
 import net.ncie.dmv.util.HttpUtils;
+import net.ncie.dmv.util.MessageEvent;
 import net.ncie.dmv.util.MyUtil;
 import net.ncie.dmv.util.TimerUtil;
 
@@ -46,12 +79,14 @@ public class StartAct extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_start);
+        initFireBase();
         initDate();
         initAds();
     }
 
     public void initAds(){
         CheckAds();
+        loadNativeAds();
         appOpenAdManager =  new OpenAds(new App.OnShowAdCompleteListener() {
             @Override
             public void onShowAdComplete() {
@@ -60,23 +95,28 @@ public class StartAct extends AppCompatActivity {
 
             @Override
             public void TurnoffAds() {
-                MyUtil.MyLog("关闭广告");
+                MyLog("关闭广告");
                 isReadyOpenAd = true;
                 startAct();
             }
 
             @Override
             public void onFailedToLoad() {
-                MyUtil.MyLog("开屏广告加载失败");
+                MyLog("开屏广告加载失败");
                 isReadyOpenAd = true;
                 startAct();
             }
 
             @Override
             public void onAdFailedToShow() {
-                MyUtil.MyLog("开屏广告显示失败");
+                MyLog("开屏广告显示失败");
                 isReadyOpenAd = true;
                 startAct();
+            }
+
+            @Override
+            public void onAdLoaded() {
+
             }
         });
 
@@ -116,7 +156,7 @@ public class StartAct extends AppCompatActivity {
                 list = result;
                 runOnUiThread(()->{
                     MMKV.defaultMMKV().encode(AllState, new Gson().toJson(result));
-                    MyUtil.MyLog("State已获取");
+                    MyLog("State已获取");
                     isReadyState = true;
                     startAct();
                 });
@@ -160,16 +200,153 @@ public class StartAct extends AppCompatActivity {
     }
 
     public void startOpenAd(){
+        CheckAds();
         if (Open_Ad_Switch&&All_Ad_Switch){
             //开屏广告初始化并显示
             appOpenAdManager.setActivity(this);
             appOpenAdManager.showAdIfAvailable();
         }else {
             //免广告
-            MyUtil.MyLog("开屏免广告");
+            MyLog("开屏免广告");
             t.cancel();
             isReadyOpenAd = true;
             startAct();
         }
     }
+
+    public void loadNativeAds(){
+        //加载原生横幅广告
+        if (All_Ad_Switch&&Native_main_Ad_Switch) {
+            NativeAds.refreshMainNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
+                @Override
+                public void onShowNativeAdComplete() {
+                    MyUtil.MyLog("onShowNativeAdComplete完成");
+                    EventBus.getDefault().post(new MessageEvent("NativeAds"));
+
+                }
+
+                @Override
+                public void onFailedToLoad() {
+
+                }
+
+                @Override
+                public void onAdClicked() {
+
+                }
+            });
+        }else {
+            MyUtil.MyLog("Native_main免广告");
+
+        }
+    }
+
+    public void initFireBase(){
+        FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
+
+        /*FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(1800)
+                .build();
+        remoteConfig.setConfigSettingsAsync(configSettings);*/
+
+
+        remoteConfig.fetch()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            remoteConfig.activate();
+                            String ad_config = remoteConfig.getString("Ad_Config");
+
+                            new Gson().fromJson(ad_config,new TypeToken<AdConfigBean>(){}.getType());
+
+
+
+                            String string = remoteConfig.getString(Fire_All_Ad_Show_Max);
+                            if (!string.equals("")){
+
+                                All_Ad_Show_Max  = Integer.parseInt(string);
+                            }
+
+                            String string1 = remoteConfig.getString(Fire_Open_Ad_Show_Max);
+                            if (!string1.equals("")){
+                                Open_Ad_Show_Max  = Integer.parseInt(string1);
+                            }
+
+
+                            String string2 = remoteConfig.getString(Fire_Native_main_Show_Max);
+                            if (!string2.equals("")){
+                                Native_main_Show_Max  = Integer.parseInt(string2);
+                            }
+
+
+                            String string3 = remoteConfig.getString(Fire_Native_node_Show_Max);
+                            if (!string3.equals("")){
+                                Native_node_Show_Max  = Integer.parseInt(string3);
+                            }
+
+
+                            String string4 = remoteConfig.getString(Fire_Native_result_Show_Max);
+                            if (!string4.equals("")){
+                                Native_result_Show_Max  = Integer.parseInt(string4);
+                            }
+
+
+                            String string5 = remoteConfig.getString(Fire_Interstitial_Show_Max);
+                            if (!string5.equals("")){
+                                Interstitial_Show_Max  = Integer.parseInt(string5);
+                            }
+
+
+                            String string6 = remoteConfig.getString(Fire_All_Clicks_Max);
+                            if (!string6.equals("")){
+                                All_Clicks_Max  = Integer.parseInt(string6);
+                            }
+
+
+                            String string7 = remoteConfig.getString(Fire_Open_Clicks_Max);
+                            if (!string7.equals("")){
+                                Open_Clicks_Max  = Integer.parseInt(string7);
+                            }
+
+
+                            String string8 = remoteConfig.getString(Fire_Native_main_Clicks_Max);
+                            if (!string8.equals("")){
+                                Native_main_Clicks_Max  = Integer.parseInt(string8);
+                            }
+
+
+                            String string9 = remoteConfig.getString(Fire_Native_node_Clicks_Max);
+                            if (!string9.equals("")){
+                                Native_node_Clicks_Max  = Integer.parseInt(string9);
+                            }
+
+
+                            String string10 = remoteConfig.getString(Fire_Native_result_Clicks_Max);
+                            if (!string10.equals("")){
+                                Native_result_Clicks_Max  = Integer.parseInt(string10);
+                            }
+
+
+                            String string11 = remoteConfig.getString(Fire_Interstitial_Clicks_Max);
+                            if (!string11.equals("")){
+                                Interstitial_Clicks_Max  = Integer.parseInt(string11);
+                            }
+
+
+                            String string12 = remoteConfig.getString(Fire_Testing_Ad_Interval);
+                            if (!string12.equals("")){
+                                MyLog("FireBase All_Ad_Show_Max展示次数"+string12);
+                                Testing_Ad_Interval = Integer.parseInt(string12);
+                            }
+
+
+                            MyLog("Ad远程配置成功");
+                        }else {
+                            MyLog("Ad远程配置失败");
+                        }
+
+                    }});
+    }
+
 }

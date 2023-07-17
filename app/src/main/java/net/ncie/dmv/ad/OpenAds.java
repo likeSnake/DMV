@@ -75,8 +75,9 @@ public class OpenAds {
                 if (activity.isDestroyed() || activity.isFinishing() || activity.isChangingConfigurations()) {
                     return;
                 }else {
-                    //加载成功后显示广告
-                    showAdIfAvailable();
+                    //加载成功
+                    //showAdIfAvailable();
+                    onShowAdCompleteListener.onAdLoaded();
                 }
             }
 
@@ -92,8 +93,9 @@ public class OpenAds {
                 isLoadingAd = false;
 
                 isOpenAdLoad = false;
-                //重新加载
-                showAdIfAvailable();
+                onShowAdCompleteListener.onFailedToLoad();
+
+
             }
         };
 

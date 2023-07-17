@@ -3,6 +3,8 @@ package net.ncie.dmv.ad;
 import static net.ncie.dmv.ad.AdConst.ADMOB_AD_Native_ID;
 import static net.ncie.dmv.ad.AdConst.Native_Main_Ad_Clicks;
 import static net.ncie.dmv.ad.AdConst.Native_Main_Ad_Impressions;
+import static net.ncie.dmv.ad.AdConst.Native_Node_Ad_Clicks;
+import static net.ncie.dmv.ad.AdConst.Native_Node_Ad_Impressions;
 import static net.ncie.dmv.ad.AdConst.isAdShowing;
 import static net.ncie.dmv.util.AdUtils.AdsClickCount;
 import static net.ncie.dmv.util.AdUtils.AdsShowCount;
@@ -38,7 +40,7 @@ public class NativeAds {
     private static NativeAd nativeResultAd;
 
     public static NativeAdView adViewMain;
-    public static NativeAdView adViewResult;
+    public static NativeAdView adViewTesting;
     public static NativeAdView adViewNode;
 
     private static Boolean isMute  = false;//广告是否静音
@@ -73,14 +75,12 @@ public class NativeAds {
 
                         adViewMain =
                                 (NativeAdView) activity.getLayoutInflater()
-                                        .inflate(R.layout.ad_test_fied, null);
+                                        .inflate(R.layout.ad_main_fied, null);
                         populateUnifiedNativeAdView(unifiedNativeAd, adViewMain,true);
 
                         MyUtil.MyLog("视图已更新");
 
-                        adViewResult = (NativeAdView) activity.getLayoutInflater()
-                                .inflate(R.layout.ad_test_fied, null);
-                        populateUnifiedNativeAdView(unifiedNativeAd, adViewResult,true);
+
 
                         if (listener!=null) {
                             listener.onShowNativeAdComplete();
@@ -115,6 +115,7 @@ public class NativeAds {
                                         super.onAdClicked();
                                         //点击广告统计
                                         AdsClickCount(Native_Main_Ad_Clicks);
+                                        CheckAds();
                                        /* refreshAd(context, new OnShowNativeAdCompleteListener() {
                                             @Override
                                             public void onShowNativeAdComplete() {
@@ -167,9 +168,9 @@ public class NativeAds {
 
                         MyUtil.MyLog("Result视图已更新");
 
-                        adViewResult = (NativeAdView) activity.getLayoutInflater()
-                                .inflate(R.layout.ad_main_fied, null);
-                        populateUnifiedNativeAdView(unifiedNativeAd, adViewResult,true);
+                        adViewTesting = (NativeAdView) activity.getLayoutInflater()
+                                .inflate(R.layout.ad_test_fied, null);
+                        populateUnifiedNativeAdView(unifiedNativeAd, adViewTesting,true);
 
                         if (listener!=null) {
                             listener.onShowNativeAdComplete();
@@ -203,11 +204,11 @@ public class NativeAds {
                                     public void onAdClicked() {
                                         super.onAdClicked();
                                         //点击广告统计
-                                        AdsClickCount(Native_Main_Ad_Clicks);
+                                        AdsClickCount(Native_Node_Ad_Clicks);
+                                        CheckAds();
                                        /* refreshAd(context, new OnShowNativeAdCompleteListener() {
                                             @Override
                                             public void onShowNativeAdComplete() {
-
                                             }
                                         });*/
                                        /* //点击后刷新广告
@@ -218,7 +219,8 @@ public class NativeAds {
                                     public void onAdImpression() {
                                         super.onAdImpression();
                                         //展示广告统计
-                                        AdsShowCount(Native_Main_Ad_Impressions);
+                                        AdsShowCount(Native_Node_Ad_Impressions);
+                                        CheckAds();
                                     }
 
                                     @Override
@@ -396,5 +398,8 @@ public class NativeAds {
     }
     public interface OnShowNativeAdCompleteListener{
         void onShowNativeAdComplete();
+
+        void onFailedToLoad();
+        void onAdClicked();
     }
 }

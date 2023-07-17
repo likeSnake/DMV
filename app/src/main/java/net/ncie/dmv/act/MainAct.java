@@ -2,6 +2,7 @@ package net.ncie.dmv.act;
 
 import static net.ncie.dmv.ad.AdConst.All_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Interstitial_Ad_Switch;
+import static net.ncie.dmv.ad.AdConst.Native_main_Ad_Switch;
 import static net.ncie.dmv.ad.NativeAds.adViewMain;
 import static net.ncie.dmv.constant.MyAppApiConfig.AllState;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectCar;
@@ -10,21 +11,26 @@ import static net.ncie.dmv.constant.MyAppApiConfig.SelectMiddleItems;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectState;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectTestUrl;
 import static net.ncie.dmv.util.AdUtils.CheckAds;
+import static net.ncie.dmv.util.AdUtils.refreshMainNativeAd;
 import static net.ncie.dmv.util.AdUtils.startInterstitialAds;
+import static net.ncie.dmv.util.MyUtil.MyLog;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -95,11 +101,13 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
     private TimerUtil t;
     private boolean isAds = false;
     private boolean isTests = false;
+    private FrameLayout ads_main_native;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
+        EventBus.getDefault().register(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -107,6 +115,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
 
         initLoading();
         initUI();
+        initAds();
         initData();
         getTests(true);
         initListener();
@@ -127,6 +136,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
         right_top = findViewById(R.id.right_top);
         left_top = findViewById(R.id.left_top);
         start_test = findViewById(R.id.start_test);
+        ads_main_native = findViewById(R.id.ads_main_native);
         // 加载底部弹窗的布局
         bottomSheetView = getLayoutInflater().inflate(R.layout.item_bottom, null);
 
@@ -154,9 +164,44 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
 
     }
 
+    public void initAds(){
+        // refreshMainNativeAd(MainAct.this,ads_main_native);
+        startNativeAds();
+    }
+    public void startNativeAds(){
 
+        if (All_Ad_Switch&&Native_main_Ad_Switch) {
+            ads_main_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
+            if (adViewMain !=null) {
+                MyLog("填充横幅广告视图");
+                if (adViewMain.getParent()!=null){
+                    ((FrameLayout)adViewMain.getParent()).removeView(adViewMain);
+                }
+                ads_main_native.addView(adViewMain);
+            }else {
+                refreshMainNativeAd(MainAct.this,ads_main_native);
+            }
 
+        }else {
+            MyLog("Native_main 免广告");
+            ads_main_native.removeAllViews();
+            ads_main_native.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+        }
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateNativeAdEvent(MessageEvent event) {
+        MyUtil.MyLog("EventBus接收到");
+        switch (event.getMsg()){
+            case "NativeAds":
+                //刷新NativeAd广告
+                MyUtil.MyLog("接收到更新");
+                startNativeAds();
+                break;
+        }
+
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -170,7 +215,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                 }
                 MMKV.defaultMMKV().encode(SelectCar,car_list.get(selectCar));
 
-                MyUtil.MyLog(selectCar);
+                MyLog(selectCar);
                 getTests(false);
              //   updateImageCar();
                 break;
@@ -186,7 +231,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                 }
                 MMKV.defaultMMKV().encode(SelectCar,car_list.get(selectCar));
 
-                MyUtil.MyLog(selectCar);
+                MyLog(selectCar);
                 getTests(false);
             //    updateImageCar();
                 break;
@@ -210,7 +255,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                         startInterstitialAd();
 
                         LeftSelectItem = SelectedPosition;
-                        MyUtil.MyLog(state+"*-*-*-*-*"+state_list.get(LeftSelectItem));
+                        MyLog(state+"*-*-*-*-*"+state_list.get(LeftSelectItem));
                         if (!state.equals(state_list.get(LeftSelectItem))) {
                             state = state_list.get(LeftSelectItem);
                             //selectCar = SelectedPosition
@@ -289,7 +334,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                     t.cancel();
                     //广告显示
                     //  isShow = true;
-                    MyUtil.MyLog("广告显示成功");
+                    MyLog("广告显示成功");
                     isAds = true;
                     dialogDismiss();
                     CheckAds();
@@ -303,7 +348,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
 
                 @Override
                 public void onFailedToLoad() {
-                    MyUtil.MyLog("开屏广告加载失败");
+                    MyLog("开屏广告加载失败");
                     t.cancel();
                     isAds = true;
                     dialogDismiss();
@@ -312,15 +357,20 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
 
                 @Override
                 public void onAdFailedToShow() {
-                    MyUtil.MyLog("开屏广告显示失败");
+                    MyLog("开屏广告显示失败");
                     t.cancel();
                     isAds = true;
                     dialogDismiss();
 
                 }
+
+                @Override
+                public void onAdLoaded() {
+
+                }
             });
         }else {
-            MyUtil.MyLog("插屏免广告");
+            MyLog("插屏免广告");
             t.cancel();
             isAds = true;
             dialogDismiss();
@@ -413,7 +463,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
     public void updateTestTitle(){
         if (list!=null) {
             int size = list.size();
-            MyUtil.MyLog(RightSelectItem);
+            MyLog(RightSelectItem);
             int questionNum = list.get(RightSelectItem).getQuestionNum();
             String passingScore = list.get(RightSelectItem).getPassingScore();
             int acceptableErrNum = list.get(RightSelectItem).getAcceptableErrNum();
@@ -461,7 +511,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
     public void getTests(boolean isTrue){
         dialog.show();
         car = car_list.get(selectCar);
-        MyUtil.MyLog(car_list.get(selectCar));
+        MyLog(car_list.get(selectCar));
         Map<String,String> map = new HashMap<>();
         map.put("type",car_list.get(selectCar));
         map.put("state",state);

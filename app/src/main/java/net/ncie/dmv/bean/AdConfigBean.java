@@ -1,110 +1,170 @@
 package net.ncie.dmv.bean;
 
-import java.util.List;
-
 public class AdConfigBean {
 
     /**
-     * interval : 10
-     * clickLimit : 300
-     * showLimit : 50
-     * fbId : 1152359378860889
-     * closeAd : false
-     * closeVersions : []
-     * closeInter : false
-     * refreshTime : 60
-     * interCoverRate : 50
-     * nativeCoverRate : 50
+     * Fire_Testing_Ad_Interval : 5
+     * show_ad_configure : {"Fire_All_Ad_Show_Max":"30","Fire_Interstitial_Show_Max":"10","Fire_Native_main_Show_Max":"10","Fire_Native_node_Show_Max":"10","Fire_Native_result_Show_Max":"10","Fire_Open_Ad_Show_Max":"10"}
+     * click_ad_configure : {"Fire_All_Clicks_Max":"999","Fire_Interstitial_Clicks_Max":"999","Fire_Native_main_Clicks_Max":"999","nameFire_Native_node_Clicks_Max":"999","Fire_Native_result_Clicks_Max":"999","Fire_Open_Clicks_Max":"999"}
      */
 
-    private int interval;
-    private int clickLimit;
-    private int showLimit;
-    private String fbId;
-    private boolean closeAd;
-    private boolean closeInter;
-    private int refreshTime;
-    private int interCoverRate;
-    private int nativeCoverRate;
-    private List<?> closeVersions;
+    private String Fire_Testing_Ad_Interval;
+    private ShowAdConfigureBean show_ad_configure;
+    private ClickAdConfigureBean click_ad_configure;
 
-    public int getInterval() {
-        return interval;
+    public String getFire_Testing_Ad_Interval() {
+        return Fire_Testing_Ad_Interval;
     }
 
-    public void setInterval(int interval) {
-        this.interval = interval;
+    public void setFire_Testing_Ad_Interval(String Fire_Testing_Ad_Interval) {
+        this.Fire_Testing_Ad_Interval = Fire_Testing_Ad_Interval;
     }
 
-    public int getClickLimit() {
-        return clickLimit;
+    public ShowAdConfigureBean getShow_ad_configure() {
+        return show_ad_configure;
     }
 
-    public void setClickLimit(int clickLimit) {
-        this.clickLimit = clickLimit;
+    public void setShow_ad_configure(ShowAdConfigureBean show_ad_configure) {
+        this.show_ad_configure = show_ad_configure;
     }
 
-    public int getShowLimit() {
-        return showLimit;
+    public ClickAdConfigureBean getClick_ad_configure() {
+        return click_ad_configure;
     }
 
-    public void setShowLimit(int showLimit) {
-        this.showLimit = showLimit;
+    public void setClick_ad_configure(ClickAdConfigureBean click_ad_configure) {
+        this.click_ad_configure = click_ad_configure;
     }
 
-    public String getFbId() {
-        return fbId;
+    public static class ShowAdConfigureBean {
+        /**
+         * Fire_All_Ad_Show_Max : 30
+         * Fire_Interstitial_Show_Max : 10
+         * Fire_Native_main_Show_Max : 10
+         * Fire_Native_node_Show_Max : 10
+         * Fire_Native_result_Show_Max : 10
+         * Fire_Open_Ad_Show_Max : 10
+         */
+
+        private String Fire_All_Ad_Show_Max;
+        private String Fire_Interstitial_Show_Max;
+        private String Fire_Native_main_Show_Max;
+        private String Fire_Native_node_Show_Max;
+        private String Fire_Native_result_Show_Max;
+        private String Fire_Open_Ad_Show_Max;
+
+        public String getFire_All_Ad_Show_Max() {
+            return Fire_All_Ad_Show_Max;
+        }
+
+        public void setFire_All_Ad_Show_Max(String Fire_All_Ad_Show_Max) {
+            this.Fire_All_Ad_Show_Max = Fire_All_Ad_Show_Max;
+        }
+
+        public String getFire_Interstitial_Show_Max() {
+            return Fire_Interstitial_Show_Max;
+        }
+
+        public void setFire_Interstitial_Show_Max(String Fire_Interstitial_Show_Max) {
+            this.Fire_Interstitial_Show_Max = Fire_Interstitial_Show_Max;
+        }
+
+        public String getFire_Native_main_Show_Max() {
+            return Fire_Native_main_Show_Max;
+        }
+
+        public void setFire_Native_main_Show_Max(String Fire_Native_main_Show_Max) {
+            this.Fire_Native_main_Show_Max = Fire_Native_main_Show_Max;
+        }
+
+        public String getFire_Native_node_Show_Max() {
+            return Fire_Native_node_Show_Max;
+        }
+
+        public void setFire_Native_node_Show_Max(String Fire_Native_node_Show_Max) {
+            this.Fire_Native_node_Show_Max = Fire_Native_node_Show_Max;
+        }
+
+        public String getFire_Native_result_Show_Max() {
+            return Fire_Native_result_Show_Max;
+        }
+
+        public void setFire_Native_result_Show_Max(String Fire_Native_result_Show_Max) {
+            this.Fire_Native_result_Show_Max = Fire_Native_result_Show_Max;
+        }
+
+        public String getFire_Open_Ad_Show_Max() {
+            return Fire_Open_Ad_Show_Max;
+        }
+
+        public void setFire_Open_Ad_Show_Max(String Fire_Open_Ad_Show_Max) {
+            this.Fire_Open_Ad_Show_Max = Fire_Open_Ad_Show_Max;
+        }
     }
 
-    public void setFbId(String fbId) {
-        this.fbId = fbId;
-    }
+    public static class ClickAdConfigureBean {
+        /**
+         * Fire_All_Clicks_Max : 999
+         * Fire_Interstitial_Clicks_Max : 999
+         * Fire_Native_main_Clicks_Max : 999
+         * nameFire_Native_node_Clicks_Max : 999
+         * Fire_Native_result_Clicks_Max : 999
+         * Fire_Open_Clicks_Max : 999
+         */
 
-    public boolean isCloseAd() {
-        return closeAd;
-    }
+        private String Fire_All_Clicks_Max;
+        private String Fire_Interstitial_Clicks_Max;
+        private String Fire_Native_main_Clicks_Max;
+        private String nameFire_Native_node_Clicks_Max;
+        private String Fire_Native_result_Clicks_Max;
+        private String Fire_Open_Clicks_Max;
 
-    public void setCloseAd(boolean closeAd) {
-        this.closeAd = closeAd;
-    }
+        public String getFire_All_Clicks_Max() {
+            return Fire_All_Clicks_Max;
+        }
 
-    public boolean isCloseInter() {
-        return closeInter;
-    }
+        public void setFire_All_Clicks_Max(String Fire_All_Clicks_Max) {
+            this.Fire_All_Clicks_Max = Fire_All_Clicks_Max;
+        }
 
-    public void setCloseInter(boolean closeInter) {
-        this.closeInter = closeInter;
-    }
+        public String getFire_Interstitial_Clicks_Max() {
+            return Fire_Interstitial_Clicks_Max;
+        }
 
-    public int getRefreshTime() {
-        return refreshTime;
-    }
+        public void setFire_Interstitial_Clicks_Max(String Fire_Interstitial_Clicks_Max) {
+            this.Fire_Interstitial_Clicks_Max = Fire_Interstitial_Clicks_Max;
+        }
 
-    public void setRefreshTime(int refreshTime) {
-        this.refreshTime = refreshTime;
-    }
+        public String getFire_Native_main_Clicks_Max() {
+            return Fire_Native_main_Clicks_Max;
+        }
 
-    public int getInterCoverRate() {
-        return interCoverRate;
-    }
+        public void setFire_Native_main_Clicks_Max(String Fire_Native_main_Clicks_Max) {
+            this.Fire_Native_main_Clicks_Max = Fire_Native_main_Clicks_Max;
+        }
 
-    public void setInterCoverRate(int interCoverRate) {
-        this.interCoverRate = interCoverRate;
-    }
+        public String getNameFire_Native_node_Clicks_Max() {
+            return nameFire_Native_node_Clicks_Max;
+        }
 
-    public int getNativeCoverRate() {
-        return nativeCoverRate;
-    }
+        public void setNameFire_Native_node_Clicks_Max(String nameFire_Native_node_Clicks_Max) {
+            this.nameFire_Native_node_Clicks_Max = nameFire_Native_node_Clicks_Max;
+        }
 
-    public void setNativeCoverRate(int nativeCoverRate) {
-        this.nativeCoverRate = nativeCoverRate;
-    }
+        public String getFire_Native_result_Clicks_Max() {
+            return Fire_Native_result_Clicks_Max;
+        }
 
-    public List<?> getCloseVersions() {
-        return closeVersions;
-    }
+        public void setFire_Native_result_Clicks_Max(String Fire_Native_result_Clicks_Max) {
+            this.Fire_Native_result_Clicks_Max = Fire_Native_result_Clicks_Max;
+        }
 
-    public void setCloseVersions(List<?> closeVersions) {
-        this.closeVersions = closeVersions;
+        public String getFire_Open_Clicks_Max() {
+            return Fire_Open_Clicks_Max;
+        }
+
+        public void setFire_Open_Clicks_Max(String Fire_Open_Clicks_Max) {
+            this.Fire_Open_Clicks_Max = Fire_Open_Clicks_Max;
+        }
     }
 }

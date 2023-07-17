@@ -1,9 +1,12 @@
 package net.ncie.dmv;
 
 
+import static net.ncie.dmv.ad.AdConst.isAdShowing;
+
 import android.app.Activity;
 import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -15,8 +18,13 @@ import androidx.lifecycle.LifecycleOwner;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.firebase.FirebaseApp;
 import com.tencent.mmkv.MMKV;
 
+import net.ncie.dmv.act.MainAct;
+import net.ncie.dmv.act.RebootAct;
+import net.ncie.dmv.act.StartAct;
+import net.ncie.dmv.ad.AdConst;
 import net.ncie.dmv.ad.InterstitialAds;
 import net.ncie.dmv.ad.NativeAds;
 import net.ncie.dmv.util.MessageEvent;
@@ -37,6 +45,7 @@ public class App extends Application
         super.onCreate();
         this.registerActivityLifecycleCallbacks(this);
         MMKV.initialize(this);
+        FirebaseApp.initializeApp(this);
         initDate();
 
         initGoogleAds();
@@ -70,15 +79,6 @@ public class App extends Application
                 });
 
     }
-    public void initAds(){
-        //加载原生横幅广告
-        NativeAds.refreshMainNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
-            @Override
-            public void onShowNativeAdComplete() {
-                EventBus.getDefault().post(new MessageEvent("NativeAds"));
-            }
-        });
-    }
 
 
 
@@ -105,7 +105,16 @@ public class App extends Application
             //后台回到前台
             isForground = true;
 
-
+            MyUtil.MyLog("onActivityStarted");
+            //仅当正在显示开屏广告时，不加载插页广告
+            if (!isAdShowing) {
+                activity.startActivity(new Intent(activity, RebootAct.class));
+                //始终销毁main以外的界面
+                if ((!activity.getClass().getName().equals(MainAct.class.getName()))/*&&(!activity.getClass().getName().equals(StartAct.class.getName()))*/){
+                    MyUtil.MyLog("销毁界面："+activity.getClass().getName());
+                    activity.finish();
+                }
+            }
         }
 
     }
@@ -131,6 +140,10 @@ public class App extends Application
         if (count==0){
             isForground = false;
             //切后台
+            AdConst.AppState =  false;
+            if (activity.getClass().getName().equals(MainAct.class.getName())){
+                EventBus.getDefault().post(new MessageEvent("isBackground"));
+            }
 
         }
     }
@@ -158,6 +171,8 @@ public class App extends Application
         void onFailedToLoad();
 
         void onAdFailedToShow();
+
+        void onAdLoaded();
     }
 
 

@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#F3F3F3"
+        android:background="#EEEFF2"
         android:minHeight="50dp"
         android:orientation="vertical">
 
@@ -15,9 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:background="#F3F3F3"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:paddingTop="3dp">
 
             <LinearLayout
@@ -25,12 +24,58 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.gms.ads.nativead.MediaView
-                    android:id="@+id/ad_media"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_width="200dp"
-                    android:layout_height="110dp"
-                    android:layout_marginTop="5dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.google.android.gms.ads.nativead.MediaView
+                        android:id="@+id/ad_media"
+                        android:layout_width="200dp"
+                        android:layout_height="110dp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        >
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_centerHorizontal="true"
+                            android:padding="10dp"
+                            >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:text="Ad"
+                                android:background="#FFCC66"
+                                android:textColor="#FFFFFF"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="85.5dp"
+                                android:elevation="3dp" />
+
+                            <Button
+                                android:id="@+id/ad_call_to_action"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ads_sharp"
+                                android:textColor="@color/white"
+
+                                android:textSize="15sp" />
+
+                        </RelativeLayout>
+
+
+                    </RelativeLayout>
+
+
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -65,11 +110,7 @@
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
-                            <TextView style="@style/AppTheme.AdAttribution"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:layout_marginStart="10dp"
-                                />
+
                         </LinearLayout>
 
 
@@ -79,22 +120,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="20dp"
                             android:layout_marginEnd="20dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_horizontal">
 
-                    <Button
-                        android:id="@+id/ad_call_to_action"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp" />
-                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

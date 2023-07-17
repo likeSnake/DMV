@@ -36,15 +36,20 @@ import static net.ncie.dmv.ad.AdConst.Open_Ad_Impressions;
 import static net.ncie.dmv.ad.AdConst.Open_Ad_Show_Max;
 import static net.ncie.dmv.ad.AdConst.Open_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Open_Clicks_Max;
+import static net.ncie.dmv.util.MyUtil.MyLog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.widget.FrameLayout;
 
 import com.tencent.mmkv.MMKV;
 
 import net.ncie.dmv.App;
 import net.ncie.dmv.ad.InterstitialAds;
+import net.ncie.dmv.ad.NativeAds;
 import net.ncie.dmv.ad.OpenAds;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -60,10 +65,10 @@ public class AdUtils {
 
         if (MMKV.defaultMMKV().decodeString(All_Ad_Impressions) != null) {
             AllAdShows = Integer.parseInt(MMKV.defaultMMKV().decodeString(All_Ad_Impressions));
-            MyUtil.MyLog("所有广告展示次数：" + (AllAdShows + 1));
+            MyLog("所有广告展示次数：" + (AllAdShows + 1));
             if (MMKV.defaultMMKV().decodeString(AdType) != null) {
                 AdShows = Integer.parseInt(MMKV.defaultMMKV().decodeString(AdType));
-                MyUtil.MyLog(AdType + "广告展示次数：" + (AdShows + 1));
+                MyLog(AdType + "广告展示次数：" + (AdShows + 1));
             } else {
                 AdShows = 0;
             }
@@ -85,10 +90,10 @@ public class AdUtils {
 
         if (MMKV.defaultMMKV().decodeString(All_Ad_Clicks) != null) {
             AllAdClicks = Integer.parseInt(MMKV.defaultMMKV().decodeString(All_Ad_Clicks));
-            MyUtil.MyLog("所有广告点击次数：" + (AllAdClicks + 1));
+            MyLog("所有广告点击次数：" + (AllAdClicks + 1));
             if (MMKV.defaultMMKV().decodeString(AdType) != null) {
                 AdClicks = Integer.parseInt(MMKV.defaultMMKV().decodeString(AdType));
-                MyUtil.MyLog(AdType + "广告点击次数：" + (AdClicks + 1));
+                MyLog(AdType + "广告点击次数：" + (AdClicks + 1));
             } else {
                 AdClicks = 0;
             }
@@ -124,7 +129,7 @@ public class AdUtils {
                 public void onShowAdComplete() {
                     //广告显示
                     //  isShow = true;
-                    MyUtil.MyLog("广告显示成功");
+                    MyLog("广告显示成功");
                     CheckAds();
                 }
 
@@ -142,9 +147,14 @@ public class AdUtils {
                 public void onAdFailedToShow() {
 
                 }
+
+                @Override
+                public void onAdLoaded() {
+
+                }
             });
         }else {
-            MyUtil.MyLog("插屏免广告");
+            MyLog("插屏免广告");
         }
     }
     public static void CheckAds() {
@@ -155,7 +165,7 @@ public class AdUtils {
             //判断全局展示广告
             if (AllAdShows >= All_Ad_Show_Max) {
                 //全局免广告
-                MyUtil.MyLog("展示达全局免广告:" + AllAdShows);
+                MyLog("展示达全局免广告:" + AllAdShows);
                 All_Ad_Switch = false;
                 setAdFreeDay(All_Ad_FreeTime);
                 MMKV.defaultMMKV().encode(All_Ad_Impressions, "0");
@@ -166,7 +176,7 @@ public class AdUtils {
                     int AllAdClicks = Integer.parseInt(MMKV.defaultMMKV().decodeString(All_Ad_Clicks));
                     if (AllAdClicks >= All_Clicks_Max) {
                         //全局免广告
-                        MyUtil.MyLog("点击达全局免广告:" + AllAdClicks);
+                        MyLog("点击达全局免广告:" + AllAdClicks);
                         All_Ad_Switch = false;
                         setAdFreeDay(All_Ad_FreeTime);
                         MMKV.defaultMMKV().encode(All_Ad_Clicks, "0");
@@ -226,7 +236,7 @@ public class AdUtils {
 
                 checkOpenAd();
             } else {
-                MyUtil.MyLog("开屏免广告："+openFreeDay+"-"+nowDay);
+                MyLog("开屏免广告："+openFreeDay+"-"+nowDay);
                 Open_Ad_Switch = false;
             }
         } else {
@@ -241,7 +251,7 @@ public class AdUtils {
                 checkMainNativeAd();
 
             } else {
-                MyUtil.MyLog(nativeFreeDay+"--"+nowDay);
+                MyLog(nativeFreeDay+"--"+nowDay);
                 Native_main_Ad_Switch = false;
             }
         } else {
@@ -256,7 +266,7 @@ public class AdUtils {
                 checkNodeNativeAd();
 
             } else {
-                MyUtil.MyLog("Native_node免广告时间");
+                MyLog("Native_node免广告时间");
                 Native_node_Ad_Switch = false;
             }
         } else {
@@ -271,7 +281,7 @@ public class AdUtils {
                 checkResultNativeAd();
 
             } else {
-                MyUtil.MyLog("Native_node免广告时间");
+                MyLog("Native_node免广告时间");
                 Native_result_Ad_Switch = false;
             }
         } else {
@@ -376,7 +386,7 @@ public class AdUtils {
             int i = Integer.parseInt(MMKV.defaultMMKV().decodeString(Open_Ad_Impressions));
             if (MMKV.defaultMMKV().decodeString(Open_Ad_Clicks) != null) {
                 int j = Integer.parseInt(MMKV.defaultMMKV().decodeString(Open_Ad_Clicks));
-                MyUtil.MyLog("开屏展示点击："+i+"-"+j);
+                MyLog("开屏展示点击："+i+"-"+j);
                 if (i >= Open_Ad_Show_Max || j >= Open_Clicks_Max) {
 
                     //达到当天展示或点击次数，所有广告免广告一天
@@ -391,4 +401,33 @@ public class AdUtils {
         }
     }
     public class UpdateNativeAdEvent {}
+
+
+    public static void refreshMainNativeAd(Context context, FrameLayout ad_frameLayout){
+        //加载原生横幅广告
+        if (All_Ad_Switch&&Native_main_Ad_Switch) {
+            NativeAds.refreshMainNativeAd(context, new NativeAds.OnShowNativeAdCompleteListener() {
+                @Override
+                public void onShowNativeAdComplete() {
+                    //加载成功通知更新
+                    EventBus.getDefault().post(new MessageEvent("NativeAds"));
+                }
+
+                @Override
+                public void onFailedToLoad() {
+
+                }
+
+                @Override
+                public void onAdClicked() {
+                    MyLog("刷新NativeAds");
+                    refreshMainNativeAd(context,ad_frameLayout);
+                }
+            });
+        }else {
+            MyLog("Native_main 免广告");
+            ad_frameLayout.removeAllViews();
+        }
+
+    }
 }

@@ -2,8 +2,9 @@ package net.ncie.dmv.act;
 
 import static net.ncie.dmv.ad.AdConst.All_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Interstitial_Ad_Switch;
-import static net.ncie.dmv.ad.AdConst.Native_main_Ad_Switch;
-import static net.ncie.dmv.ad.NativeAds.adViewMain;
+import static net.ncie.dmv.ad.AdConst.Native_node_Ad_Switch;
+import static net.ncie.dmv.ad.AdConst.Testing_Ad_Interval;
+import static net.ncie.dmv.ad.NativeAds.adViewTesting;
 import static net.ncie.dmv.constant.MyAppApiConfig.AllState;
 import static net.ncie.dmv.constant.MyAppApiConfig.ImageUrl;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectCar;
@@ -13,18 +14,17 @@ import static net.ncie.dmv.constant.MyAppApiConfig.SelectQuestionsUrl;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectState;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectTestUrl;
 import static net.ncie.dmv.util.AdUtils.CheckAds;
-import static net.ncie.dmv.util.AdUtils.startInterstitialAds;
 import static net.ncie.dmv.util.HttpUtils.getBitmapFromURL;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -36,6 +36,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -130,7 +131,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     private Button previous;
     private Button restart;
     private LinearLayout buttons;
-    private FrameLayout ads_main_native;
+    private FrameLayout ads_testing_native;
+    private ScrollView topic_scrollView;
     private TimerUtil t;
     private boolean isAds = false;
     private boolean isTestReady = false;
@@ -178,7 +180,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
         previous = findViewById(R.id.previous);
         buttons = findViewById(R.id.buttons);
         restart = findViewById(R.id.restart);
-        ads_main_native = findViewById(R.id.ads_main_native);
+        ads_testing_native = findViewById(R.id.ads_main_native);
+        topic_scrollView = findViewById(R.id.topic_scrollView);
 
 
         bottomSheetView = getLayoutInflater().inflate(R.layout.item_bottom, null);
@@ -377,16 +380,28 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     }
     public void initAds(){
         //加载原生横幅广告
-        if (All_Ad_Switch&&Native_main_Ad_Switch) {
-            NativeAds.refreshMainNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
+        if (All_Ad_Switch&&Native_node_Ad_Switch) {
+            ads_testing_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
+            NativeAds.refreshResultNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
                 @Override
                 public void onShowNativeAdComplete() {
                     EventBus.getDefault().post(new MessageEvent("NativeAds"));
                 }
+
+                @Override
+                public void onFailedToLoad() {
+
+                }
+
+                @Override
+                public void onAdClicked() {
+
+                }
             });
         }else {
             MyUtil.MyLog("NativeAds免广告");
-            ads_main_native.removeAllViews();
+            ads_testing_native.removeAllViews();
+            ads_testing_native.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
     }
@@ -394,30 +409,42 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
 
     public void startNativeAds(){
 
-        if (All_Ad_Switch&&Native_main_Ad_Switch) {
-            ads_main_native.removeAllViews();
+        if (All_Ad_Switch&&Native_node_Ad_Switch) {
+            ads_testing_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
+            ads_testing_native.removeAllViews();
 
-            if (adViewMain.getParent()!=null){
-                ((FrameLayout)adViewMain.getParent()).removeView(adViewMain);
+            if (adViewTesting.getParent()!=null){
+                ((FrameLayout) adViewTesting.getParent()).removeView(adViewTesting);
             }
 
-            if (adViewMain !=null) {
+            if (adViewTesting !=null) {
                 MyUtil.MyLog("填充横幅广告视图");
-                ads_main_native.addView(adViewMain);
+                ads_testing_native.addView(adViewTesting);
 
             }else {
                 //加载原生横幅广告
-                NativeAds.refreshMainNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
+                NativeAds.refreshResultNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
                     @Override
                     public void onShowNativeAdComplete() {
                         //加载成功通知更新
                         EventBus.getDefault().post(new MessageEvent("NativeAds"));
                     }
+
+                    @Override
+                    public void onFailedToLoad() {
+
+                    }
+
+                    @Override
+                    public void onAdClicked() {
+
+                    }
                 });
             }
 
         }else {
-            ads_main_native.removeAllViews();
+            ads_testing_native.removeAllViews();
+            ads_testing_native.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
     }
@@ -576,8 +603,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                             if (currentTest+1 != topicBean.getResult().size()) {
                                 isDisable = true;
                                 currentTest++;
-                                MyUtil.MyLog((currentTest+1)%8);
-                                if ((currentTest+1)%8==0){
+                                MyUtil.MyLog("Testing_Ad_Interval--"+Testing_Ad_Interval);
+                                if ((currentTest+1)%Testing_Ad_Interval==0){
                                     isAds = true;
                                     startInterstitialAd(true);
                                   //  startInterstitialAds(this);
@@ -599,7 +626,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
 
             case R.id.show_grid:
                 if(!isShowGrid) {
-                    topic__relativeLayout.setVisibility(View.GONE);
+                    topic_scrollView.setVisibility(View.GONE);
                     grid_relative.setVisibility(View.VISIBLE);
                     ic_jia_image.setImageResource(R.drawable.ic_jian);
                     Progress_test.setText("Hide Progress");
@@ -607,7 +634,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                     restart.setVisibility(View.VISIBLE);
                     isShowGrid = true;
                 }else {
-                    topic__relativeLayout.setVisibility(View.VISIBLE);
+                    topic_scrollView.setVisibility(View.VISIBLE);
                     grid_relative.setVisibility(View.GONE);
                     ic_jia_image.setImageResource(R.drawable.ic_jia);
                     Progress_test.setText("View Progress");
@@ -787,6 +814,11 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                     t.cancel();
                     isAdReady = true;
                     dialogDismiss(isSwitch);
+                }
+
+                @Override
+                public void onAdLoaded() {
+
                 }
             });
         }else {
