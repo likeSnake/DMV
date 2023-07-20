@@ -1,62 +1,33 @@
 {
   "project_info": {
-    "project_number": "253637921581",
-    "project_id": "my-tow-vpn",
-    "storage_bucket": "my-tow-vpn.appspot.com"
+    "project_number": "317320810510",
+    "project_id": "dmv-ee64d",
+    "storage_bucket": "dmv-ee64d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:253637921581:android:1cdaa541b4ee93780d61a4",
+        "mobilesdk_app_id": "1:317320810510:android:34aecd7f5a7d72bbd5ec5f",
         "android_client_info": {
           "package_name": "com.baboonfly.dmv"
         }
       },
       "oauth_client": [
         {
-          "client_id": "253637921581-rvtjmch4p57rkdeuv38cga1ppvj7f6f4.apps.googleusercontent.com",
+          "client_id": "317320810510-4cdl8mpod1i91mfgdrq619ar2l1kf5kj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC_ATZ5M0QpCGZAtr0MPkcEEcYNnzXCPWE"
+          "current_key": "AIzaSyCCsq0-2tocj5VTV5Lho7soIv_FckBM0xQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "253637921581-rvtjmch4p57rkdeuv38cga1ppvj7f6f4.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:253637921581:android:a5d8e073dbdb8b5b0d61a4",
-        "android_client_info": {
-          "package_name": "net.meta.socks.over.wall.vpn"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "253637921581-rvtjmch4p57rkdeuv38cga1ppvj7f6f4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC_ATZ5M0QpCGZAtr0MPkcEEcYNnzXCPWE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "253637921581-rvtjmch4p57rkdeuv38cga1ppvj7f6f4.apps.googleusercontent.com",
+              "client_id": "317320810510-4cdl8mpod1i91mfgdrq619ar2l1kf5kj.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

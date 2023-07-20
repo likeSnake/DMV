@@ -256,90 +256,12 @@ public class StartAct extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             remoteConfig.activate();
-                            String ad_config = remoteConfig.getString("Ad_Config");
-
-                            new Gson().fromJson(ad_config,new TypeToken<AdConfigBean>(){}.getType());
-
-
-
-                            String string = remoteConfig.getString(Fire_All_Ad_Show_Max);
-                            if (!string.equals("")){
-
-                                All_Ad_Show_Max  = Integer.parseInt(string);
-                            }
-
-                            String string1 = remoteConfig.getString(Fire_Open_Ad_Show_Max);
-                            if (!string1.equals("")){
-                                Open_Ad_Show_Max  = Integer.parseInt(string1);
-                            }
-
-
-                            String string2 = remoteConfig.getString(Fire_Native_main_Show_Max);
-                            if (!string2.equals("")){
-                                Native_main_Show_Max  = Integer.parseInt(string2);
-                            }
-
-
-                            String string3 = remoteConfig.getString(Fire_Native_node_Show_Max);
-                            if (!string3.equals("")){
-                                Native_node_Show_Max  = Integer.parseInt(string3);
-                            }
-
-
-                            String string4 = remoteConfig.getString(Fire_Native_result_Show_Max);
-                            if (!string4.equals("")){
-                                Native_result_Show_Max  = Integer.parseInt(string4);
-                            }
-
-
-                            String string5 = remoteConfig.getString(Fire_Interstitial_Show_Max);
-                            if (!string5.equals("")){
-                                Interstitial_Show_Max  = Integer.parseInt(string5);
-                            }
-
-
-                            String string6 = remoteConfig.getString(Fire_All_Clicks_Max);
-                            if (!string6.equals("")){
-                                All_Clicks_Max  = Integer.parseInt(string6);
-                            }
-
-
-                            String string7 = remoteConfig.getString(Fire_Open_Clicks_Max);
-                            if (!string7.equals("")){
-                                Open_Clicks_Max  = Integer.parseInt(string7);
-                            }
-
-
-                            String string8 = remoteConfig.getString(Fire_Native_main_Clicks_Max);
-                            if (!string8.equals("")){
-                                Native_main_Clicks_Max  = Integer.parseInt(string8);
-                            }
-
-
-                            String string9 = remoteConfig.getString(Fire_Native_node_Clicks_Max);
-                            if (!string9.equals("")){
-                                Native_node_Clicks_Max  = Integer.parseInt(string9);
-                            }
-
-
-                            String string10 = remoteConfig.getString(Fire_Native_result_Clicks_Max);
-                            if (!string10.equals("")){
-                                Native_result_Clicks_Max  = Integer.parseInt(string10);
-                            }
-
-
-                            String string11 = remoteConfig.getString(Fire_Interstitial_Clicks_Max);
-                            if (!string11.equals("")){
-                                Interstitial_Clicks_Max  = Integer.parseInt(string11);
-                            }
-
 
                             String string12 = remoteConfig.getString(Fire_Testing_Ad_Interval);
                             if (!string12.equals("")){
                                 MyLog("FireBase All_Ad_Show_Max展示次数"+string12);
                                 Testing_Ad_Interval = Integer.parseInt(string12);
                             }
-
 
                             MyLog("Ad远程配置成功");
                         }else {
