@@ -45,7 +45,7 @@ public class App extends Application
         super.onCreate();
         this.registerActivityLifecycleCallbacks(this);
         MMKV.initialize(this);
-        FirebaseApp.initializeApp(this);
+
         initDate();
 
         initGoogleAds();

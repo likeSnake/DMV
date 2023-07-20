@@ -46,6 +46,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
@@ -242,6 +243,7 @@ public class StartAct extends AppCompatActivity {
     }
 
     public void initFireBase(){
+        FirebaseApp.initializeApp(this);
         FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
 
         /*FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
