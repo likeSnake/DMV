@@ -104,8 +104,7 @@ public class NativeAds {
                                 new AdListener() {
                                     @Override
                                     public void onAdFailedToLoad(LoadAdError loadAdError) {
-                                        System.out.println("广告加载失败："+(loadAdError.getDomain()+
-                                                        loadAdError.getCode()));
+                                        MyUtil.MyLog("MainNativeAd 广告加载失败："+loadAdError.toString());
                                         isAdShowing = false;
                                     }
 
@@ -194,8 +193,7 @@ public class NativeAds {
                                 new AdListener() {
                                     @Override
                                     public void onAdFailedToLoad(LoadAdError loadAdError) {
-                                        System.out.println("广告加载失败："+(loadAdError.getDomain()+
-                                                loadAdError.getCode()));
+                                        MyUtil.MyLog("ResultNativeAd广告加载失败："+loadAdError.toString());
                                         isAdShowing = false;
                                     }
 
@@ -280,8 +278,7 @@ public class NativeAds {
                                 new AdListener() {
                                     @Override
                                     public void onAdFailedToLoad(LoadAdError loadAdError) {
-                                        System.out.println("广告加载失败："+(loadAdError.getDomain()+
-                                                loadAdError.getCode()));
+                                        MyUtil.MyLog("ResultNativeAd广告加载失败："+loadAdError.toString());
                                         isAdShowing = false;
                                     }
 

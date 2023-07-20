@@ -89,7 +89,7 @@ public class OpenAds {
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
                 //广告加载失败
-                MyUtil.MyLog("开屏广告加载失败");
+                MyUtil.MyLog("开屏广告加载失败："+loadAdError.toString());
                 isLoadingAd = false;
 
                 isOpenAdLoad = false;
@@ -170,7 +170,7 @@ public class OpenAds {
                     @Override
                     public void onAdFailedToShowFullScreenContent(AdError adError) {
                         //广告显示失败
-                        MyUtil.MyLog("开屏广告显示失败");
+                        MyUtil.MyLog("开屏广告显示失败："+adError.toString());
                         appOpenAd = null;
                         isShowingAd = false;
                         isAdShowing = false;
