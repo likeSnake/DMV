@@ -22,8 +22,7 @@ public class RebootAct extends AppCompatActivity {
     private OpenAds appOpenAdManager;
     private int progressStatus = 0;
     private ProgressBar lodProgressBar;
-    public boolean onAdLoaded = false;
-    public boolean timeOver = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,7 @@ public class RebootAct extends AppCompatActivity {
             @Override
             public void onFailedToLoad() {
                 MyUtil.MyLog("开屏广告加载失败");
-                onAdLoaded = false;
+
                 //startAct();
             }
 
@@ -69,12 +68,9 @@ public class RebootAct extends AppCompatActivity {
 
             @Override
             public void onAdLoaded() {
-                onAdLoaded = true;
-
+                showOpenAd();
             }
         });
-
-        loadOpenAd();
 
     }
     public void initDate(){
@@ -92,20 +88,18 @@ public class RebootAct extends AppCompatActivity {
         if (Open_Ad_Switch&&All_Ad_Switch){
             //开屏广告初始化
             appOpenAdManager.setActivity(this);
-            appOpenAdManager.showAdIfAvailable();
+            appOpenAdManager.showAdIfAvailable("Loading Open");
         }else {
             //免广告
             MyUtil.MyLog("开屏免广告");
-            onAdLoaded = false;
            // startAct();
         }
     }
 
     public void showOpenAd(){
-        if (onAdLoaded&&timeOver){
-            t.cancel();
-            appOpenAdManager.showAdIfAvailable();
-        }
+        t.cancel();
+        appOpenAdManager.showAdIfAvailable("Loading Open");
+
     }
 
 
@@ -120,8 +114,7 @@ public class RebootAct extends AppCompatActivity {
                 lodProgressBar.setProgress(progressStatus);
                 if (progressStatus>=30&& loadFirst[0]){
                     loadFirst[0] = false;
-                    timeOver = true;
-                    showOpenAd();
+                    loadOpenAd();
                 }
 
             }

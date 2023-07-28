@@ -124,7 +124,7 @@ public class AdUtils {
     public static void startInterstitialAds(Context context) {
 
         if (Interstitial_Ad_Switch&&All_Ad_Switch) {
-            InterstitialAds.startAd(context, new App.OnShowAdCompleteListener() {
+            InterstitialAds.startAd(context,"null", new App.OnShowAdCompleteListener() {
                 @Override
                 public void onShowAdComplete() {
                     //广告显示

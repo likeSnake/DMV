@@ -2,6 +2,7 @@ package net.ncie.dmv;
 
 
 import static net.ncie.dmv.ad.AdConst.isAdShowing;
+import static net.ncie.dmv.ad.AdCount.loadMainNativeAd;
 
 import android.app.Activity;
 import android.app.Application;
@@ -20,6 +21,8 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.FirebaseApp;
 import com.tencent.mmkv.MMKV;
+import com.zy.devicelibrary.UtilsApp;
+import com.zy.devicelibrary.utils.FileUtils;
 
 import net.ncie.dmv.act.MainAct;
 import net.ncie.dmv.act.RebootAct;
@@ -27,6 +30,7 @@ import net.ncie.dmv.act.StartAct;
 import net.ncie.dmv.ad.AdConst;
 import net.ncie.dmv.ad.InterstitialAds;
 import net.ncie.dmv.ad.NativeAds;
+import net.ncie.dmv.bean.InfoBean;
 import net.ncie.dmv.util.MessageEvent;
 import net.ncie.dmv.util.MyUtil;
 
@@ -43,9 +47,9 @@ public class App extends Application
     @Override
     public void onCreate() {
         super.onCreate();
+        UtilsApp.init(this);
         this.registerActivityLifecycleCallbacks(this);
         MMKV.initialize(this);
-
         initDate();
 
         initGoogleAds();
@@ -60,7 +64,15 @@ public class App extends Application
     }
 
     public void initDate(){
+        if (MMKV.defaultMMKV().decodeString("aid") == null) {
+            MMKV.defaultMMKV().encode("aid", FileUtils.getSDDeviceTxt());
+        }
 
+
+        String aid = MMKV.defaultMMKV().decodeString("aid");
+        InfoBean infoBean = new InfoBean(aid,"First Open","LaunchApp","","","","","","","","","","");
+
+        loadMainNativeAd(this,infoBean);
 
     }
     //初始化google ads

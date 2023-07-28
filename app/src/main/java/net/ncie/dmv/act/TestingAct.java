@@ -385,7 +385,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
         //加载原生横幅广告
         if (All_Ad_Switch&&Native_node_Ad_Switch) {
             ads_testing_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
-            NativeAds.refreshResultNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
+            NativeAds.refreshTestingNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
                 @Override
                 public void onShowNativeAdComplete() {
                     EventBus.getDefault().post(new MessageEvent("NativeAds"));
@@ -426,7 +426,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
 
             }else {
                 //加载原生横幅广告
-                NativeAds.refreshResultNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
+                NativeAds.refreshTestingNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
                     @Override
                     public void onShowNativeAdComplete() {
                         //加载成功通知更新
@@ -609,7 +609,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                                 MyUtil.MyLog("Testing_Ad_Interval--"+Testing_Ad_Interval);
                                 if ((currentTest+1)%Testing_Ad_Interval==0){
                                     isAds = true;
-                                    startInterstitialAd(true);
+                                    startInterstitialAd(true,"Practice");
                                   //  startInterstitialAds(this);
                                     initAds();
                                 }
@@ -692,7 +692,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                         break;
                     case "left":
                         isAds = true;
-                        startInterstitialAd(false);
+                        startInterstitialAd(false,"Select");
 
                         state = state_list.get(LeftSelectItem);
                         //selectCar = SelectedPosition
@@ -777,13 +777,13 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
         });
         t.start();
     }
-    public void startInterstitialAd(boolean isSwitch){
+    public void startInterstitialAd(boolean isSwitch,String position){
         if (isSwitch){
             dialog.show();
         }
         startTimer(isSwitch);
         if (Interstitial_Ad_Switch&&All_Ad_Switch) {
-            InterstitialAds.startAd(this, new App.OnShowAdCompleteListener() {
+            InterstitialAds.startAd(this,position, new App.OnShowAdCompleteListener() {
                 @Override
                 public void onShowAdComplete() {
 

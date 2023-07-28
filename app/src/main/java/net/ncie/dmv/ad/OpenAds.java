@@ -5,6 +5,7 @@ import static net.ncie.dmv.ad.AdConst.Open_Ad_Clicks;
 import static net.ncie.dmv.ad.AdConst.Open_Ad_Impressions;
 import static net.ncie.dmv.ad.AdConst.isAdShowing;
 import static net.ncie.dmv.ad.AdConst.isOpenAdLoad;
+import static net.ncie.dmv.ad.AdCount.loadMainNativeAd;
 import static net.ncie.dmv.util.AdUtils.AdsClickCount;
 import static net.ncie.dmv.util.AdUtils.AdsShowCount;
 
@@ -15,12 +16,16 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import net.ncie.dmv.App;
+import net.ncie.dmv.bean.InfoBean;
 import net.ncie.dmv.util.MyUtil;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdValue;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnPaidEventListener;
 import com.google.android.gms.ads.appopen.AppOpenAd;
+import com.tencent.mmkv.MMKV;
 
 import java.util.Date;
 
@@ -29,7 +34,8 @@ import java.util.Date;
 public class OpenAds {
 
     private static final String LOG_TAG = "AppOpenAdManager";
-
+    private static  long startTime;
+    private String Position = "";
     private App.OnShowAdCompleteListener onShowAdCompleteListener;
     private AppOpenAd appOpenAd = null;
     private boolean isLoadingAd = false;
@@ -55,6 +61,12 @@ public class OpenAds {
             return;
         }
 
+        startTime = System.currentTimeMillis() / 1000;
+        String aid = MMKV.defaultMMKV().decodeString("aid");
+        InfoBean infoBean = new InfoBean(aid,Position,"RequestAds",ADMOB_AD_Open_ID,"","","","","","","","","");
+        loadMainNativeAd(activity,infoBean);
+
+
         isLoadingAd = true;
         AdRequest request = new AdRequest.Builder().build();
 
@@ -66,6 +78,13 @@ public class OpenAds {
              */
             @Override
             public void onAdLoaded(AppOpenAd ad) {
+                long l = (System.currentTimeMillis() / 1000) - startTime;
+                String aid = MMKV.defaultMMKV().decodeString("aid");
+                InfoBean infoBean = new InfoBean(aid,Position,"AdsLoad",ADMOB_AD_Open_ID,l +" sec - AdLoad","","",ad.getResponseInfo().getResponseId(),ad.getResponseInfo().toString(),"","","","");
+
+                loadMainNativeAd(activity,infoBean);
+
+
                 //广告加载成功
                 isOpenAdLoad = true;
                 appOpenAd = ad;
@@ -88,6 +107,11 @@ public class OpenAds {
              */
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
+                long l = (System.currentTimeMillis() / 1000) - startTime;
+                String aid = MMKV.defaultMMKV().decodeString("aid");
+                InfoBean infoBean = new InfoBean(aid,Position,"RequestAdsFailure",ADMOB_AD_Open_ID,l +" sec - "+loadAdError.toString(), "","","","","","","","");
+
+                loadMainNativeAd(activity,infoBean);
                 //广告加载失败
                 MyUtil.MyLog("开屏广告加载失败："+loadAdError.toString());
                 isLoadingAd = false;
@@ -126,7 +150,8 @@ public class OpenAds {
      * Show the ad if one isn't already showing.
      *
      */
-    public void showAdIfAvailable() {
+    public void showAdIfAvailable(String position) {
+        Position = position;
         showAdIfAvailable(activity);
     }
 
@@ -180,6 +205,16 @@ public class OpenAds {
                     @Override
                     public void onAdClicked() {
                         super.onAdClicked();
+
+                        String aid = MMKV.defaultMMKV().decodeString("aid");
+                        InfoBean infoBean = new InfoBean(aid,Position,"AdsClicked",ADMOB_AD_Open_ID,"","","","","","","",activity.getPackageName()
+                                ,"");
+                        loadMainNativeAd(activity,infoBean);
+
+
+                        //广告点击次数统计
+                        AdsClickCount(Open_Ad_Clicks);
+
                         //广告点击次数统计
                         AdsClickCount(Open_Ad_Clicks);
                     }
@@ -187,6 +222,11 @@ public class OpenAds {
                     @Override
                     public void onAdImpression() {
                         super.onAdImpression();
+                        String aid = MMKV.defaultMMKV().decodeString("aid");
+                        InfoBean infoBean = new InfoBean(aid,Position,"AdsShow",ADMOB_AD_Open_ID,"","","","","","","",activity.getPackageName()
+                                ,"");
+                        loadMainNativeAd(activity,infoBean);
+
                         //广告展示次数统计
                         AdsShowCount(Open_Ad_Impressions);
 
@@ -201,6 +241,18 @@ public class OpenAds {
 
                     }
                 });
+
+        appOpenAd.setOnPaidEventListener(new OnPaidEventListener() {
+            @Override
+            public void onPaidEvent(@NonNull AdValue adValue) {
+                String ips = "";
+                String aid = MMKV.defaultMMKV().decodeString("aid");
+                InfoBean infoBean = new InfoBean(aid,Position,"AdsShowValue",ADMOB_AD_Open_ID,"",adValue.getCurrencyCode(), String.valueOf(adValue.getValueMicros()),"","","","",activity.getPackageName()
+                        ,"");
+                loadMainNativeAd(activity,infoBean);
+
+            }
+        });
 
         isShowingAd = true;
         appOpenAd.show(activity);

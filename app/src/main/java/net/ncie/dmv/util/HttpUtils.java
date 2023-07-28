@@ -23,8 +23,10 @@ import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpUtils {
@@ -69,6 +71,41 @@ public class HttpUtils {
                 } catch (JSONException e) {
                     Log.e(TAG, "JSON parse failed: " + e.getMessage());
                     callback.onFailure(e);
+                }
+            }
+        });
+    }
+
+    public static void sendPostRequest(String urlString, String requestBody, final HttpCallback<String> callback) {
+
+
+        OkHttpClient client = new OkHttpClient();
+
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(requestBody, mediaType);
+        Request request = new Request.Builder()
+                .url(urlString)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "Request failed: " + e);
+                callback.onFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if(response!=null) {
+                    try {
+                        String responseString = response.body().string();
+                        Log.d(TAG, "Response: " + responseString);
+                        callback.onSuccess(responseString);
+                    } catch (Exception e) {
+                        Log.e(TAG, "JSON parse failed: " + e.getMessage());
+                        callback.onFailure(e);
+                    }
                 }
             }
         });

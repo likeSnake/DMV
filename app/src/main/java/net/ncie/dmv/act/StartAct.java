@@ -117,12 +117,18 @@ public class StartAct extends AppCompatActivity {
 
             @Override
             public void onAdLoaded() {
-
+                showOpenAd();
             }
         });
 
         startOpenAd();
 
+    }
+    public void showOpenAd(){
+        t.cancel();
+        if (Open_Ad_Switch&&All_Ad_Switch){
+            appOpenAdManager.showAdIfAvailable("Start Open");
+        }
     }
     public void initDate(){
         if(MMKV.defaultMMKV().decodeString(SelectState)!=null&&MMKV.defaultMMKV().decodeString(SelectCar)!=null){
@@ -203,9 +209,9 @@ public class StartAct extends AppCompatActivity {
     public void startOpenAd(){
         CheckAds();
         if (Open_Ad_Switch&&All_Ad_Switch){
-            //开屏广告初始化并显示
+            //开屏广告初始化
             appOpenAdManager.setActivity(this);
-            appOpenAdManager.showAdIfAvailable();
+            appOpenAdManager.showAdIfAvailable("Start Open");
         }else {
             //免广告
             MyLog("开屏免广告");

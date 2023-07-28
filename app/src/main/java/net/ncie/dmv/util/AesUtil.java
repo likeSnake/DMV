@@ -11,11 +11,11 @@ public class AesUtil {
     private static final String CipherMode = "AES/CBC/PKCS5Padding";
 
     private static String getPasswordKey() {
-        return "Qdjis4aY4NnWr3fO";
+        return "WWUmgP6vzkmdrwPk";
     }
 
     private static String getHEX() {
-        return "qqnaW3etdPD7OOZU";
+        return "9Ek3KnuEQCubzKNo";
     }
 
     private static SecretKeySpec createKey(String key) {

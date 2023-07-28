@@ -12,7 +12,6 @@ import static net.ncie.dmv.constant.MyAppApiConfig.SelectState;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectTestUrl;
 import static net.ncie.dmv.util.AdUtils.CheckAds;
 import static net.ncie.dmv.util.AdUtils.refreshMainNativeAd;
-import static net.ncie.dmv.util.AdUtils.startInterstitialAds;
 import static net.ncie.dmv.util.MyUtil.MyLog;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -325,7 +324,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
     public void startInterstitialAd(){
         startTimer();
         if (Interstitial_Ad_Switch&&All_Ad_Switch) {
-            InterstitialAds.startAd(this, new App.OnShowAdCompleteListener() {
+            InterstitialAds.startAd(this,"Select", new App.OnShowAdCompleteListener() {
                 @Override
                 public void onShowAdComplete() {
                     t.cancel();

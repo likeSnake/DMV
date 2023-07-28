@@ -2,14 +2,13 @@ package net.ncie.dmv.ad;
 
 public class  AdConst {
     //正式广告
-   /* public static final String ADMOB_AD_Native_ID = "ca-app-pub-6544599885867352/4973746921";
+    public static final String ADMOB_AD_Native_ID = "ca-app-pub-6544599885867352/4973746921";
     public static final String ADMOB_AD_Open_ID = "ca-app-pub-6544599885867352/1266420291";
-    public static final String ADMOB_AD_Interstitial_ID = "ca-app-pub-6544599885867352/6742656992";*/
-
+    public static final String ADMOB_AD_Interstitial_ID = "ca-app-pub-6544599885867352/6742656992";
     //测试广告
-    public static final String ADMOB_AD_Native_ID = "ca-app-pub-3940256099942544/2247696110";
+   /* public static final String ADMOB_AD_Native_ID = "ca-app-pub-3940256099942544/2247696110";
     public static final String ADMOB_AD_Interstitial_ID = "ca-app-pub-3940256099942544/1033173712";
-    public static final String ADMOB_AD_Open_ID = "ca-app-pub-3940256099942544/3419835294";
+    public static final String ADMOB_AD_Open_ID = "ca-app-pub-3940256099942544/3419835294";*/
 
 
     public static Boolean isStartApp = false;
@@ -75,4 +74,11 @@ public class  AdConst {
 
 
     public static boolean AppState = true;
+
+    public static String my_ip = "";
+    public static String my_city = "";
+    public static String my_country = "";
+
+    public static String UploadUrl = "https://yoyofast.net/dmv/event";
+    public static String loadUrl = "https://api.myip.com";
 }
