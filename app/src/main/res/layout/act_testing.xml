@@ -430,7 +430,6 @@
                     android:layout_height="250dp"
                     android:layout_marginTop="15dp"
                     android:background="#EEEFF2"
-
                     />
 
                 <LinearLayout

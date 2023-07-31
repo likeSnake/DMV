@@ -355,7 +355,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
         }
         switch (myEvent){
             case "middle":
-            case "image_right":
+            case "right":
+                dialog.dismiss();
             case "image_left":
                 dialog.dismiss();
                 break;
