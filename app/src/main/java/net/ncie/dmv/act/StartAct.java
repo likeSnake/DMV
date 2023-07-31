@@ -17,6 +17,7 @@ import static net.ncie.dmv.ad.AdConst.Native_node_Clicks_Max;
 import static net.ncie.dmv.ad.AdConst.Native_result_Clicks_Max;
 import static net.ncie.dmv.ad.AdConst.Interstitial_Clicks_Max;
 import static net.ncie.dmv.ad.AdConst.Testing_Ad_Interval;
+import static net.ncie.dmv.ad.AdConst.Testing_Ad_Native;
 import static net.ncie.dmv.ad.FireBaseConst.Fire_All_Ad_Show_Max;
 import static net.ncie.dmv.ad.FireBaseConst.Fire_All_Clicks_Max;
 import static net.ncie.dmv.ad.FireBaseConst.Fire_Interstitial_Clicks_Max;
@@ -30,6 +31,7 @@ import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_result_Show_Max;
 import static net.ncie.dmv.ad.FireBaseConst.Fire_Open_Ad_Show_Max;
 import static net.ncie.dmv.ad.FireBaseConst.Fire_Open_Clicks_Max;
 import static net.ncie.dmv.ad.FireBaseConst.Fire_Testing_Ad_Interval;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Testing_Ad_Native;
 import static net.ncie.dmv.constant.MyAppApiConfig.AllState;
 import static net.ncie.dmv.constant.MyAppApiConfig.My_Firebase_AdConfig;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectCar;
@@ -267,9 +269,17 @@ public class StartAct extends AppCompatActivity {
 
                             String string12 = remoteConfig.getString(Fire_Testing_Ad_Interval);
                             if (!string12.equals("")){
-                                MyLog("FireBase All_Ad_Show_Max展示次数"+string12);
+                                MyLog("FireBase Testing_Ad_Interval次数"+string12);
                                 Testing_Ad_Interval = Integer.parseInt(string12);
                             }
+
+                            String Ad_Native = remoteConfig.getString(Fire_Testing_Ad_Native);
+                            if (!string12.equals("")){
+                                MyLog("FireBase Testing_Ad_Native次数"+string12);
+                                Testing_Ad_Native = Integer.parseInt(Ad_Native);
+                            }
+
+
 
                             MyLog("Ad远程配置成功");
                         }else {

@@ -16,4 +16,5 @@ public class FireBaseConst {
     public static String Fire_Interstitial_Clicks_Max = "Fire_Interstitial_Clicks_Max";
 
     public static String Fire_Testing_Ad_Interval = "Fire_Testing_Ad_Interval";
+    public static String Fire_Testing_Ad_Native = "Fire_Testing_Ad_Native";
 }

@@ -4,6 +4,7 @@ import static net.ncie.dmv.ad.AdConst.All_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Interstitial_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Native_node_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Testing_Ad_Interval;
+import static net.ncie.dmv.ad.AdConst.Testing_Ad_Native;
 import static net.ncie.dmv.ad.NativeAds.adViewTesting;
 import static net.ncie.dmv.constant.MyAppApiConfig.AllState;
 import static net.ncie.dmv.constant.MyAppApiConfig.ImageUrl;
@@ -611,6 +612,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                                     isAds = true;
                                     startInterstitialAd(true,"Practice");
                                   //  startInterstitialAds(this);
+                                }
+                                if ((currentTest+1)%Testing_Ad_Native==0){
                                     initAds();
                                 }
 
