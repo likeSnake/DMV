@@ -6,7 +6,7 @@ public class  AdConst {
     public static final String ADMOB_AD_Open_ID = "ca-app-pub-6544599885867352/1266420291";
     public static final String ADMOB_AD_Interstitial_ID = "ca-app-pub-6544599885867352/6742656992";
     //测试广告
-   /* public static final String ADMOB_AD_Native_ID = "ca-app-pub-3940256099942544/2247696110";
+/*    public static final String ADMOB_AD_Native_ID = "ca-app-pub-3940256099942544/2247696110";
     public static final String ADMOB_AD_Interstitial_ID = "ca-app-pub-3940256099942544/1033173712";
     public static final String ADMOB_AD_Open_ID = "ca-app-pub-3940256099942544/3419835294";*/
 
@@ -20,10 +20,10 @@ public class  AdConst {
     public static Boolean isInitInterstitialShow = false;
 
     //广告展示最大次数
-    public static int All_Ad_Show_Max = 30;
+    public static int All_Ad_Show_Max = 100;
     public static int Open_Ad_Show_Max = 10;
-    public static int Native_main_Show_Max = 10;
-    public static int Native_node_Show_Max = 10;
+    public static int Native_main_Show_Max = 20;
+    public static int Native_Testing_Show_Max = 50;
     public static int Native_result_Show_Max = 10;
     public static int Interstitial_Show_Max = 10;
     public static int Testing_Ad_Interval = 8;
@@ -33,7 +33,7 @@ public class  AdConst {
     public static int All_Clicks_Max = Integer.MAX_VALUE;
     public static int Open_Clicks_Max = Integer.MAX_VALUE;
     public static int Native_main_Clicks_Max = Integer.MAX_VALUE;
-    public static int Native_node_Clicks_Max = Integer.MAX_VALUE;
+    public static int Native_Testing_Clicks_Max = Integer.MAX_VALUE;
     public static int Native_result_Clicks_Max = Integer.MAX_VALUE;
     public static int Interstitial_Clicks_Max = Integer.MAX_VALUE;
 
@@ -41,7 +41,7 @@ public class  AdConst {
     //广告开关
     public static Boolean All_Ad_Switch = true;
     public static Boolean Native_main_Ad_Switch = true;
-    public static Boolean Native_node_Ad_Switch = true;
+    public static Boolean Native_Testing_Ad_Switch = true;
     public static Boolean Native_result_Ad_Switch = true;
     public static Boolean Interstitial_Ad_Switch = true;
     public static Boolean Open_Ad_Switch = true;

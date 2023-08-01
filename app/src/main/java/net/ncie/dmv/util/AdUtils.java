@@ -24,9 +24,9 @@ import static net.ncie.dmv.ad.AdConst.Native_Result_Ad_Impressions;
 import static net.ncie.dmv.ad.AdConst.Native_main_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Native_main_Clicks_Max;
 import static net.ncie.dmv.ad.AdConst.Native_main_Show_Max;
-import static net.ncie.dmv.ad.AdConst.Native_node_Ad_Switch;
-import static net.ncie.dmv.ad.AdConst.Native_node_Clicks_Max;
-import static net.ncie.dmv.ad.AdConst.Native_node_Show_Max;
+import static net.ncie.dmv.ad.AdConst.Native_Testing_Ad_Switch;
+import static net.ncie.dmv.ad.AdConst.Native_Testing_Clicks_Max;
+import static net.ncie.dmv.ad.AdConst.Native_Testing_Show_Max;
 import static net.ncie.dmv.ad.AdConst.Native_result_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Native_result_Clicks_Max;
 import static net.ncie.dmv.ad.AdConst.Native_result_Show_Max;
@@ -38,7 +38,6 @@ import static net.ncie.dmv.ad.AdConst.Open_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Open_Clicks_Max;
 import static net.ncie.dmv.util.MyUtil.MyLog;
 
-import android.app.Activity;
 import android.content.Context;
 import android.widget.FrameLayout;
 
@@ -47,7 +46,6 @@ import com.tencent.mmkv.MMKV;
 import net.ncie.dmv.App;
 import net.ncie.dmv.ad.InterstitialAds;
 import net.ncie.dmv.ad.NativeAds;
-import net.ncie.dmv.ad.OpenAds;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -261,13 +259,13 @@ public class AdUtils {
         if (MMKV.defaultMMKV().decodeString(Native_Ad_Node_FreeTime) != null) {
             int nativeFreeDay = Integer.parseInt(MMKV.defaultMMKV().decodeString(Native_Ad_Node_FreeTime));
             if (nativeFreeDay < nowDay) {
-                Native_node_Ad_Switch = true;
+                Native_Testing_Ad_Switch = true;
 
                 checkNodeNativeAd();
 
             } else {
                 MyLog("Native_node免广告时间");
-                Native_node_Ad_Switch = false;
+                Native_Testing_Ad_Switch = false;
             }
         } else {
             checkNodeNativeAd();
@@ -350,9 +348,9 @@ public class AdUtils {
             int i = Integer.parseInt(MMKV.defaultMMKV().decodeString(Native_Node_Ad_Impressions));
             if (MMKV.defaultMMKV().decodeString(Native_Node_Ad_Clicks) != null) {
                 int j = Integer.parseInt(MMKV.defaultMMKV().decodeString(Native_Node_Ad_Clicks));
-                if (i >= Native_node_Show_Max || j >= Native_node_Clicks_Max) {
+                if (i >= Native_Testing_Show_Max || j >= Native_Testing_Clicks_Max) {
                     //达到展示或点击次数，当前广告免广告一天
-                    Native_node_Ad_Switch = false;
+                    Native_Testing_Ad_Switch = false;
 
                     setAdFreeDay(Native_Ad_Node_FreeTime);
                     MMKV.defaultMMKV().encode(Native_Node_Ad_Impressions, "0");
@@ -400,9 +398,6 @@ public class AdUtils {
             }
         }
     }
-    public class UpdateNativeAdEvent {}
-
-
     public static void refreshMainNativeAd(Context context, FrameLayout ad_frameLayout){
         //加载原生横幅广告
         if (All_Ad_Switch&&Native_main_Ad_Switch) {
@@ -423,9 +418,47 @@ public class AdUtils {
                     MyLog("刷新NativeAds");
                     refreshMainNativeAd(context,ad_frameLayout);
                 }
+
+                @Override
+                public void onAdShow() {
+
+                }
             });
         }else {
             MyLog("Native_main 免广告");
+            ad_frameLayout.removeAllViews();
+        }
+
+    }
+
+    public static void loadTestingAd(Context context, FrameLayout ad_frameLayout){
+        if (All_Ad_Switch&&Native_Testing_Ad_Switch) {
+            NativeAds.refreshTestingNativeAd(context, new NativeAds.OnShowNativeAdCompleteListener() {
+                @Override
+                public void onShowNativeAdComplete() {
+                    //加载成功通知更新
+                  //  EventBus.getDefault().post(new MessageEvent("NativeAds"));
+                }
+
+                @Override
+                public void onFailedToLoad() {
+
+                }
+
+                @Override
+                public void onAdClicked() {
+                    MyLog("刷新NativeAds");
+                    loadTestingAd(context,ad_frameLayout);
+
+                }
+
+                @Override
+                public void onAdShow() {
+                    loadTestingAd(context, ad_frameLayout);
+                }
+            });
+        }else {
+            MyLog("Native_Testing 免广告");
             ad_frameLayout.removeAllViews();
         }
 

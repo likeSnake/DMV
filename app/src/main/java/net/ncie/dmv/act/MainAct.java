@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -168,7 +169,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
     public void startNativeAds(){
 
         if (All_Ad_Switch&&Native_main_Ad_Switch) {
-            ads_main_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
+          //  ads_main_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
             if (adViewMain !=null) {
                 MyLog("填充横幅广告视图");
                 if (adViewMain.getParent()!=null){
@@ -182,7 +183,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
         }else {
             MyLog("Native_main 免广告");
             ads_main_native.removeAllViews();
-            ads_main_native.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+         //   ads_main_native.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
         }
     }
 
@@ -198,6 +199,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
         }
 
     }
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()){

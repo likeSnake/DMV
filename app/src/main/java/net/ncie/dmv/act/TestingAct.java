@@ -2,7 +2,7 @@ package net.ncie.dmv.act;
 
 import static net.ncie.dmv.ad.AdConst.All_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Interstitial_Ad_Switch;
-import static net.ncie.dmv.ad.AdConst.Native_node_Ad_Switch;
+import static net.ncie.dmv.ad.AdConst.Native_Testing_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Testing_Ad_Interval;
 import static net.ncie.dmv.ad.AdConst.Testing_Ad_Native;
 import static net.ncie.dmv.ad.NativeAds.adViewTesting;
@@ -15,7 +15,9 @@ import static net.ncie.dmv.constant.MyAppApiConfig.SelectQuestionsUrl;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectState;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectTestUrl;
 import static net.ncie.dmv.util.AdUtils.CheckAds;
+import static net.ncie.dmv.util.AdUtils.loadTestingAd;
 import static net.ncie.dmv.util.HttpUtils.getBitmapFromURL;
+import static net.ncie.dmv.util.MyUtil.MyLog;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -219,7 +221,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     }
     public void initData(){
 
-        initAds();
+        initAds(true);
       //  loading.hide();
         // 加载底部弹窗的布局
 
@@ -374,7 +376,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
     public void onUpdateNativeAdEvent(MessageEvent event) {
         MyUtil.MyLog("EventBus接收到");
         switch (event.getMsg()){
-            case "NativeAds":
+            case "TestingNativeAds":
                 //刷新NativeAd广告
                 MyUtil.MyLog("接收到更新");
                 startNativeAds();
@@ -383,14 +385,17 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
 
         }
     }
-    public void initAds(){
+    public void initAds(boolean b){
         //加载原生横幅广告
-        if (All_Ad_Switch&&Native_node_Ad_Switch) {
-            ads_testing_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
+        if (All_Ad_Switch && Native_Testing_Ad_Switch) {
+          //  ads_testing_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
             NativeAds.refreshTestingNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
                 @Override
                 public void onShowNativeAdComplete() {
-                    EventBus.getDefault().post(new MessageEvent("NativeAds"));
+                    if (b){
+                        EventBus.getDefault().post(new MessageEvent("TestingNativeAds"));
+                    }
+
                 }
 
                 @Override
@@ -401,12 +406,19 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                 @Override
                 public void onAdClicked() {
 
+                    initAds(true);
+                }
+
+                @Override
+                public void onAdShow() {
+                    MyLog("缓存NativeAds");
+                    initAds(false);
                 }
             });
         }else {
             MyUtil.MyLog("NativeAds免广告");
             ads_testing_native.removeAllViews();
-            ads_testing_native.setBackgroundColor(Color.parseColor("#FFFFFF"));
+         //   ads_testing_native.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
     }
@@ -414,8 +426,8 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
 
     public void startNativeAds(){
 
-        if (All_Ad_Switch&&Native_node_Ad_Switch) {
-            ads_testing_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
+        if (All_Ad_Switch&& Native_Testing_Ad_Switch) {
+          //  ads_testing_native.setBackgroundColor(Color.parseColor("#EEEFF2"));
             ads_testing_native.removeAllViews();
 
             if (adViewTesting.getParent()!=null){
@@ -423,33 +435,18 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
             }
 
             if (adViewTesting !=null) {
-                MyUtil.MyLog("填充横幅广告视图");
+                MyUtil.MyLog("使用原生广告缓存");
                 ads_testing_native.addView(adViewTesting);
 
             }else {
                 //加载原生横幅广告
-                NativeAds.refreshTestingNativeAd(this, new NativeAds.OnShowNativeAdCompleteListener() {
-                    @Override
-                    public void onShowNativeAdComplete() {
-                        //加载成功通知更新
-                        EventBus.getDefault().post(new MessageEvent("NativeAds"));
-                    }
-
-                    @Override
-                    public void onFailedToLoad() {
-
-                    }
-
-                    @Override
-                    public void onAdClicked() {
-
-                    }
-                });
+                MyUtil.MyLog("原生广告无缓存，重新加载");
+                initAds(true);
             }
 
         }else {
             ads_testing_native.removeAllViews();
-            ads_testing_native.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        //    ads_testing_native.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
     }
@@ -580,7 +577,7 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
         grid.setAdapter(gridAdapter);
     }
 
-
+ //   puboic
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -615,8 +612,9 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                                   //  startInterstitialAds(this);
                                 }
                                 if ((currentTest+1)%Testing_Ad_Native==0){
-                                    initAds();
+                                    startNativeAds();
                                 }
+
 
                                 current_topic.setText(String.valueOf((currentTest + 1)));
                                 setData();

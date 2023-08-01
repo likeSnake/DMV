@@ -112,10 +112,10 @@ public class NativeAds {
 
                         adViewMain =
                                 (NativeAdView) activity.getLayoutInflater()
-                                        .inflate(R.layout.ad_main_fied, null);
+                                        .inflate(R.layout.ad_test_fied, null);
                         populateUnifiedNativeAdView(unifiedNativeAd, adViewMain,true);
 
-                        MyUtil.MyLog("视图已更新");
+                        MyUtil.MyLog("nativeMainAd视图已更新");
 
 
 
@@ -200,8 +200,7 @@ public class NativeAds {
     }
 
 
-    @SuppressLint("VisibleForTests")
-    public static void refreshTestingNativeAd(Context context, OnShowNativeAdCompleteListener listener) {
+    public static void AdTestingTest(Context context, OnShowNativeAdCompleteListener listener){
         if (isTestingLoad){
             return;
         }
@@ -240,6 +239,60 @@ public class NativeAds {
                             }
                         });
 
+                        MyUtil.MyLog("Testing视图已更新");
+
+                        adViewTesting = (NativeAdView) activity.getLayoutInflater()
+                                .inflate(R.layout.ad_test_fied, null);
+                        populateUnifiedNativeAdView(unifiedNativeAd, adViewTesting,true);
+
+                        if (listener!=null) {
+                            listener.onShowNativeAdComplete();
+                        }
+                    }
+
+
+                });
+    }
+
+    @SuppressLint("VisibleForTests")
+    public static void refreshTestingNativeAd(Context context, OnShowNativeAdCompleteListener listener) {
+        if (isTestingLoad){
+            return;
+        }
+        isTestingLoad = true;
+        startTestingTime = System.currentTimeMillis() / 1000;
+
+        String aid = MMKV.defaultMMKV().decodeString("aid");
+        InfoBean infoBean = new InfoBean(aid,"Practice Native","RequestAds",ADMOB_AD_Native_ID,"","","","","","","","","");
+
+        loadMainNativeAd(context,infoBean);
+
+        Activity activity  = (Activity)context;
+        AdLoader.Builder builder = new AdLoader.Builder(context, ADMOB_AD_Native_ID);
+
+        builder.forNativeAd(
+                new NativeAd.OnNativeAdLoadedListener() {
+
+                    @Override
+                    public void onNativeAdLoaded(NativeAd unifiedNativeAd) {
+                        long l = (System.currentTimeMillis() / 1000) - startTestingTime;
+                        InfoBean infoBean = new InfoBean(aid,"Practice Native","AdsLoad",ADMOB_AD_Native_ID,l +" sec - AdLoad","","","","","","","","");
+                        loadMainNativeAd(context,infoBean);
+
+                        if (nativeResultAd != null) {
+                       //     nativeResultAd.destroy();
+                        }
+                        nativeResultAd = unifiedNativeAd;
+
+                        nativeResultAd.setOnPaidEventListener(new OnPaidEventListener() {
+                            @Override
+                            public void onPaidEvent(@NonNull AdValue adValue) {
+                                String aid = MMKV.defaultMMKV().decodeString("aid");
+                                InfoBean infoBean = new InfoBean(aid,"Practice Native","AdsShowValue",ADMOB_AD_Native_ID,"",adValue.getCurrencyCode(), String.valueOf(adValue.getValueMicros()),"","","","",activity.getPackageName(),""
+                                );
+                                loadMainNativeAd(activity,infoBean);
+                            }
+                        });
 
                         MyUtil.MyLog("Testing视图已更新");
 
@@ -269,6 +322,9 @@ public class NativeAds {
                                 new AdListener() {
                                     @Override
                                     public void onAdFailedToLoad(LoadAdError loadAdError) {
+                                        if (listener!=null) {
+                                            listener.onFailedToLoad();
+                                        }
                                         MyUtil.MyLog("ResultNativeAd广告加载失败："+loadAdError.toString());
                                         isAdShowing = false;
                                         long l = (System.currentTimeMillis() / 1000) - startTestingTime;
@@ -277,12 +333,18 @@ public class NativeAds {
 
                                         loadMainNativeAd(context,infoBean);
                                         isTestingLoad = false;
+
+
                                     }
 
 
                                     @Override
                                     public void onAdClicked() {
                                         super.onAdClicked();
+
+                                        if (listener!=null) {
+                                            listener.onAdClicked();
+                                        }
                                         //点击广告统计
                                         AdsClickCount(Native_Node_Ad_Clicks);
                                         CheckAds();
@@ -291,11 +353,16 @@ public class NativeAds {
                                         InfoBean infoBean = new InfoBean(aid,"Practice Native","AdsClicked",ADMOB_AD_Native_ID,"","","","","","","","","");
 
                                         loadMainNativeAd(context,infoBean);
+
+
                                     }
 
                                     @Override
                                     public void onAdImpression() {
                                         super.onAdImpression();
+                                        if (listener!=null) {
+                                            listener.onAdShow();
+                                        }
 
                                         String aid = MMKV.defaultMMKV().decodeString("aid");
                                         InfoBean infoBean = new InfoBean(aid,"Practice Native","AdsShow",ADMOB_AD_Native_ID,"","","","","","","","","");
@@ -303,6 +370,8 @@ public class NativeAds {
                                         //展示广告统计
                                         AdsShowCount(Native_Node_Ad_Impressions);
                                         CheckAds();
+
+
                                     }
 
                                     @Override
@@ -484,5 +553,7 @@ public class NativeAds {
 
         void onFailedToLoad();
         void onAdClicked();
+
+        void onAdShow();
     }
 }

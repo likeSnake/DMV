@@ -2,6 +2,7 @@ package net.ncie.dmv.act;
 
 import static net.ncie.dmv.ad.AdConst.All_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Open_Ad_Switch;
+import static net.ncie.dmv.ad.OpenAds.appOpenAd;
 import static net.ncie.dmv.util.AdUtils.CheckAds;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,7 +75,13 @@ public class RebootAct extends AppCompatActivity {
 
     }
     public void initDate(){
-        startTimer();
+        if (Open_Ad_Switch&&All_Ad_Switch){
+            startTimer();
+
+        }else {
+            startNoAdTimer();
+        }
+
     }
 
     public void startAct() {
@@ -86,13 +93,18 @@ public class RebootAct extends AppCompatActivity {
 
     public void loadOpenAd(){
         if (Open_Ad_Switch&&All_Ad_Switch){
-            //开屏广告初始化
-            appOpenAdManager.setActivity(this);
-            appOpenAdManager.showAdIfAvailable("Loading Open");
+            if (appOpenAd!=null){
+                showOpenAd();
+            }else {
+                //开屏广告初始化
+                appOpenAdManager.setActivity(this);
+                appOpenAdManager.showAdIfAvailable("Loading Open");
+            }
+
         }else {
             //免广告
             MyUtil.MyLog("开屏免广告");
-           // startAct();
+            startAct();
         }
     }
 
@@ -101,15 +113,32 @@ public class RebootAct extends AppCompatActivity {
         appOpenAdManager.showAdIfAvailable("Loading Open");
 
     }
+    public void startNoAdTimer(){
+
+        t = new TimerUtil(3, 27, new TimerUtil.TimerListener() {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                progressStatus++;
+                lodProgressBar.setProgress(progressStatus);
+            }
+
+            @Override
+            public void onFinish() {
+                startAct();
+            }
+        });
+
+        t.start();
+    }
 
 
     public void startTimer(){
         //lodProgressBar.setVisibility(View.VISIBLE);
         final boolean[] loadFirst = {true};
-        t = new TimerUtil(10, 100, new TimerUtil.TimerListener() {
+        t = new TimerUtil(15, 100, new TimerUtil.TimerListener() {
             @Override
             public void onTick(long millisUntilFinished) {
-                MyUtil.MyLog("millisUntilFinished"+millisUntilFinished);
                 progressStatus++;
                 lodProgressBar.setProgress(progressStatus);
                 if (progressStatus>=30&& loadFirst[0]){

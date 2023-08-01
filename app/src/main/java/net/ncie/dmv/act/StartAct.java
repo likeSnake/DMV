@@ -1,39 +1,14 @@
 package net.ncie.dmv.act;
 
-import static net.ncie.dmv.ad.AdConst.All_Ad_Show_Max;
 import static net.ncie.dmv.ad.AdConst.All_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Native_main_Ad_Switch;
-import static net.ncie.dmv.ad.AdConst.Open_Ad_Show_Max;
 import static net.ncie.dmv.ad.AdConst.Open_Ad_Switch;
-import static net.ncie.dmv.ad.AdConst.Native_main_Show_Max;
-import static net.ncie.dmv.ad.AdConst.Native_node_Show_Max;
 
-import static net.ncie.dmv.ad.AdConst.Native_result_Show_Max;
-import static net.ncie.dmv.ad.AdConst.Interstitial_Show_Max;
-import static net.ncie.dmv.ad.AdConst.All_Clicks_Max;
-import static net.ncie.dmv.ad.AdConst.Open_Clicks_Max;
-import static net.ncie.dmv.ad.AdConst.Native_main_Clicks_Max;
-import static net.ncie.dmv.ad.AdConst.Native_node_Clicks_Max;
-import static net.ncie.dmv.ad.AdConst.Native_result_Clicks_Max;
-import static net.ncie.dmv.ad.AdConst.Interstitial_Clicks_Max;
 import static net.ncie.dmv.ad.AdConst.Testing_Ad_Interval;
 import static net.ncie.dmv.ad.AdConst.Testing_Ad_Native;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_All_Ad_Show_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_All_Clicks_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Interstitial_Clicks_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Interstitial_Show_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_main_Clicks_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_main_Show_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_node_Clicks_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_node_Show_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_result_Clicks_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Native_result_Show_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Open_Ad_Show_Max;
-import static net.ncie.dmv.ad.FireBaseConst.Fire_Open_Clicks_Max;
 import static net.ncie.dmv.ad.FireBaseConst.Fire_Testing_Ad_Interval;
 import static net.ncie.dmv.ad.FireBaseConst.Fire_Testing_Ad_Native;
 import static net.ncie.dmv.constant.MyAppApiConfig.AllState;
-import static net.ncie.dmv.constant.MyAppApiConfig.My_Firebase_AdConfig;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectCar;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectState;
 import static net.ncie.dmv.constant.MyAppApiConfig.SelectStateUrl;
@@ -50,16 +25,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.tencent.mmkv.MMKV;
 
 import net.ncie.dmv.App;
 import net.ncie.dmv.R;
 import net.ncie.dmv.ad.NativeAds;
 import net.ncie.dmv.ad.OpenAds;
-import net.ncie.dmv.bean.AdConfigBean;
 import net.ncie.dmv.util.HttpUtils;
 import net.ncie.dmv.util.MessageEvent;
 import net.ncie.dmv.util.MyUtil;
@@ -143,7 +115,7 @@ public class StartAct extends AppCompatActivity {
 
         getState();
 
-        t = new TimerUtil(10, 1, new TimerUtil.TimerListener() {
+        t = new TimerUtil(15, 1, new TimerUtil.TimerListener() {
            @Override
            public void onTick(long millisUntilFinished) {
 
@@ -241,6 +213,11 @@ public class StartAct extends AppCompatActivity {
 
                 @Override
                 public void onAdClicked() {
+
+                }
+
+                @Override
+                public void onAdShow() {
 
                 }
             });

@@ -37,7 +37,7 @@ public class OpenAds {
     private static  long startTime;
     private String Position = "";
     private App.OnShowAdCompleteListener onShowAdCompleteListener;
-    private AppOpenAd appOpenAd = null;
+    public static AppOpenAd appOpenAd = null;
     private boolean isLoadingAd = false;
     public boolean isShowingAd = false;
     private Activity activity;
@@ -256,8 +256,6 @@ public class OpenAds {
 
         isShowingAd = true;
         appOpenAd.show(activity);
-
-
     }
 
     public Activity getActivity() {

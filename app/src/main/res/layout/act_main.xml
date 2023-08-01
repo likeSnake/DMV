@@ -309,13 +309,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/test_info"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="8dp"
                 >
 
                 <FrameLayout
                     android:id="@+id/ads_main_native"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="250dp"
                     android:layout_marginTop="5dp"
                     android:background="#EEEFF2"
                     android:orientation="vertical"

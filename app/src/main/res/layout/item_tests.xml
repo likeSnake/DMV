@@ -30,6 +30,7 @@
             android:layout_centerVertical="true"
             android:text="A."
             android:textSize="20sp"
+            android:textColor="#5C5C5C"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/test_count"
@@ -38,8 +39,8 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="15dp"
             android:layout_toEndOf="@+id/test_options"
+            android:textColor="#5C5C5C"
             android:text="Always insist on the right-of-way over a vehicle when using a crosswalk." />
-
     </RelativeLayout>
 
 
