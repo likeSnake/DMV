@@ -115,7 +115,7 @@ public class OpenAds {
                 //广告加载失败
                 MyUtil.MyLog("开屏广告加载失败："+loadAdError.toString());
                 isLoadingAd = false;
-
+                isShowingAd = false;
                 isOpenAdLoad = false;
                 onShowAdCompleteListener.onFailedToLoad();
 
@@ -235,9 +235,9 @@ public class OpenAds {
                     /** Called when fullscreen content is shown. */
                     @Override
                     public void onAdShowedFullScreenContent() {
+                        isShowingAd = true;
                         onShowAdCompleteListener.onShowAdComplete();
                         isAdShowing = true;
-
 
                     }
                 });
@@ -254,7 +254,6 @@ public class OpenAds {
             }
         });
 
-        isShowingAd = true;
         appOpenAd.show(activity);
     }
 

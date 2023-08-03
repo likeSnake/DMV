@@ -12,8 +12,8 @@ android {
         applicationId "com.baboonfly.dmv"
         minSdk 21
         targetSdk 33
-        versionCode 9
-        versionName "1.0.9"
+        versionCode 10
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -56,5 +56,5 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-ads:20.5.0'
     implementation 'com.facebook.android:facebook-android-sdk:latest.release'
-    implementation 'com.github.z244370114:DeviceLibray:1.0.4'
+   // implementation 'com.github.z244370114:DeviceLibray:1.0.4'
 }
