@@ -17,7 +17,7 @@ import static net.ncie.dmv.ad.AdConst.Native_Ad_Result_FreeTime;
 import static net.ncie.dmv.ad.AdConst.Native_Main_Ad_Clicks;
 import static net.ncie.dmv.ad.AdConst.Native_Ad_Main_FreeTime;
 import static net.ncie.dmv.ad.AdConst.Native_Main_Ad_Impressions;
-import static net.ncie.dmv.ad.AdConst.Native_Node_Ad_Clicks;
+import static net.ncie.dmv.ad.AdConst.Native_Testing_Ad_Clicks;
 import static net.ncie.dmv.ad.AdConst.Native_Node_Ad_Impressions;
 import static net.ncie.dmv.ad.AdConst.Native_Result_Ad_Clicks;
 import static net.ncie.dmv.ad.AdConst.Native_Result_Ad_Impressions;
@@ -117,6 +117,7 @@ public class AdUtils {
             nowDay = Integer.parseInt(s);
 
         }
+
         MMKV.defaultMMKV().encode(type, String.valueOf(nowDay));
     }
     public static void startInterstitialAds(Context context) {
@@ -189,7 +190,7 @@ public class AdUtils {
 
             MMKV.defaultMMKV().encode(Open_Ad_Clicks, "0");
             MMKV.defaultMMKV().encode(Native_Main_Ad_Clicks, "0");
-            MMKV.defaultMMKV().encode(Native_Node_Ad_Clicks, "0");
+            MMKV.defaultMMKV().encode(Native_Testing_Ad_Clicks, "0");
             MMKV.defaultMMKV().encode(Native_Result_Ad_Clicks, "0");
             MMKV.defaultMMKV().encode(Interstitial_Ad_Clicks, "0");
         }
@@ -211,7 +212,9 @@ public class AdUtils {
 
             int freeDay = Integer.parseInt(MMKV.defaultMMKV().decodeString(All_Ad_FreeTime));
 
-            if (freeDay < nowDay) {
+            if (freeDay >= nowDay) {
+
+                MyLog("全局免广告");
                 All_Ad_Switch = false;
             } else {
                 checkAllAd(nowDay);
@@ -225,7 +228,6 @@ public class AdUtils {
 
     public static void checkAllAd(int nowDay) {
         All_Ad_Switch = true;
-
 
         if (MMKV.defaultMMKV().decodeString(Open_Ad_FreeTime) != null) {
             int openFreeDay = Integer.parseInt(MMKV.defaultMMKV().decodeString(Open_Ad_FreeTime));
@@ -346,15 +348,15 @@ public class AdUtils {
         //自定义的原生广告
         if (MMKV.defaultMMKV().decodeString(Native_Node_Ad_Impressions) != null) {
             int i = Integer.parseInt(MMKV.defaultMMKV().decodeString(Native_Node_Ad_Impressions));
-            if (MMKV.defaultMMKV().decodeString(Native_Node_Ad_Clicks) != null) {
-                int j = Integer.parseInt(MMKV.defaultMMKV().decodeString(Native_Node_Ad_Clicks));
+            if (MMKV.defaultMMKV().decodeString(Native_Testing_Ad_Clicks) != null) {
+                int j = Integer.parseInt(MMKV.defaultMMKV().decodeString(Native_Testing_Ad_Clicks));
                 if (i >= Native_Testing_Show_Max || j >= Native_Testing_Clicks_Max) {
                     //达到展示或点击次数，当前广告免广告一天
                     Native_Testing_Ad_Switch = false;
 
                     setAdFreeDay(Native_Ad_Node_FreeTime);
                     MMKV.defaultMMKV().encode(Native_Node_Ad_Impressions, "0");
-                    MMKV.defaultMMKV().encode(Native_Node_Ad_Clicks, "0");
+                    MMKV.defaultMMKV().encode(Native_Testing_Ad_Clicks, "0");
                 }
             }
         }

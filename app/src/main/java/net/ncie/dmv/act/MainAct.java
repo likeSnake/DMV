@@ -196,6 +196,10 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                 MyUtil.MyLog("接收到更新");
                 startNativeAds();
                 break;
+            case "NativeAds免广告":
+                MyUtil.MyLog("接收到NativeAds免广告");
+                ads_main_native.removeAllViews();
+                break;
         }
 
     }
@@ -250,7 +254,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                         break;
                     case "left":
 
-                        startInterstitialAd();
+                        startInterstitialAd(false);
 
                         LeftSelectItem = SelectedPosition;
                         MyLog(state+"*-*-*-*-*"+state_list.get(LeftSelectItem));
@@ -288,9 +292,11 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                 break;
             case R.id.start_test:
                 adViewMain = null;
-                Intent intent = new Intent(MainAct.this, TestingAct.class);
+                dialog.show();
+                startInterstitialAd(true);
+                /*Intent intent = new Intent(MainAct.this, TestingAct.class);
                 intent.putExtra("SelectTestId",list.get(RightSelectItem).getTest_id());
-                startActivity(intent);
+                startActivity(intent);*/
 
         }
     }
@@ -307,7 +313,7 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
             }
         }
     }
-    public void startTimer(){
+    public void startTimer(Boolean isStartTesting){
         t = new TimerUtil(10, 1, new TimerUtil.TimerListener() {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -319,12 +325,15 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                 //allStartAct();
                 dialog.dismiss();
 
+                if (isStartTesting){
+                    startTesting();
+                }
             }
         });
         t.start();
     }
-    public void startInterstitialAd(){
-        startTimer();
+    public void startInterstitialAd(Boolean isStartTesting){
+        startTimer(isStartTesting);
         if (Interstitial_Ad_Switch&&All_Ad_Switch) {
             InterstitialAds.startAd(this,"Select", new App.OnShowAdCompleteListener() {
                 @Override
@@ -341,6 +350,9 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                 @Override
                 public void TurnoffAds() {
                     //关闭广告后
+                    if (isStartTesting){
+                        startTesting();
+                    }
 
                 }
 
@@ -351,6 +363,9 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                     isAds = true;
                     dialogDismiss();
 
+                    if (isStartTesting){
+                        startTesting();
+                    }
                 }
 
                 @Override
@@ -360,6 +375,9 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
                     isAds = true;
                     dialogDismiss();
 
+                    if (isStartTesting){
+                        startTesting();
+                    }
                 }
 
                 @Override
@@ -372,7 +390,22 @@ public class MainAct extends AppCompatActivity implements View.OnClickListener{
             t.cancel();
             isAds = true;
             dialogDismiss();
+
+            if (isStartTesting){
+
+                startTesting();
+            }
         }
+
+    }
+
+    public void startTesting(){
+        if (dialog!=null){
+            dialog.dismiss();
+        }
+        Intent intent = new Intent(MainAct.this, TestingAct.class);
+        intent.putExtra("SelectTestId",list.get(RightSelectItem).getTest_id());
+        startActivity(intent);
 
     }
     public void initData(){

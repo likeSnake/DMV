@@ -8,6 +8,7 @@ import static net.ncie.dmv.ad.AdConst.isOpenAdLoad;
 import static net.ncie.dmv.ad.AdCount.loadMainNativeAd;
 import static net.ncie.dmv.util.AdUtils.AdsClickCount;
 import static net.ncie.dmv.util.AdUtils.AdsShowCount;
+import static net.ncie.dmv.util.AdUtils.CheckAds;
 
 import android.app.Activity;
 import android.content.Context;
@@ -214,9 +215,9 @@ public class OpenAds {
 
                         //广告点击次数统计
                         AdsClickCount(Open_Ad_Clicks);
-
                         //广告点击次数统计
-                        AdsClickCount(Open_Ad_Clicks);
+                      //  AdsClickCount(Open_Ad_Clicks);
+                        CheckAds();
                     }
 
                     @Override
@@ -230,6 +231,7 @@ public class OpenAds {
                         //广告展示次数统计
                         AdsShowCount(Open_Ad_Impressions);
 
+                        CheckAds();
                     }
 
                     /** Called when fullscreen content is shown. */

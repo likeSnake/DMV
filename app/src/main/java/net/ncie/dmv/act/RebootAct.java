@@ -157,4 +157,12 @@ public class RebootAct extends AppCompatActivity {
         });
         t.start();
     }
+
+    @Override
+    public void onBackPressed() {
+        // 在这里添加你的逻辑代码
+        // 如果你希望返回键被忽略，可以直接return
+        // 如果你希望执行默认的返回操作，可以调用super.onBackPressed()
+        return;
+    }
 }

@@ -3,7 +3,7 @@ package net.ncie.dmv.ad;
 import static net.ncie.dmv.ad.AdConst.ADMOB_AD_Native_ID;
 import static net.ncie.dmv.ad.AdConst.Native_Main_Ad_Clicks;
 import static net.ncie.dmv.ad.AdConst.Native_Main_Ad_Impressions;
-import static net.ncie.dmv.ad.AdConst.Native_Node_Ad_Clicks;
+import static net.ncie.dmv.ad.AdConst.Native_Testing_Ad_Clicks;
 import static net.ncie.dmv.ad.AdConst.Native_Node_Ad_Impressions;
 import static net.ncie.dmv.ad.AdConst.isAdShowing;
 import static net.ncie.dmv.ad.AdCount.loadMainNativeAd;
@@ -163,6 +163,11 @@ public class NativeAds {
                                         //点击广告统计
                                         AdsClickCount(Native_Main_Ad_Clicks);
                                         CheckAds();
+
+                                        if (listener!=null) {
+                                            listener.onAdClicked();
+                                        }
+
                                        /* refreshAd(context, new OnShowNativeAdCompleteListener() {
                                             @Override
                                             public void onShowNativeAdComplete() {
@@ -341,13 +346,13 @@ public class NativeAds {
                                     @Override
                                     public void onAdClicked() {
                                         super.onAdClicked();
+                                        //点击广告统计
+                                        AdsClickCount(Native_Testing_Ad_Clicks);
+                                        CheckAds();
 
                                         if (listener!=null) {
                                             listener.onAdClicked();
                                         }
-                                        //点击广告统计
-                                        AdsClickCount(Native_Node_Ad_Clicks);
-                                        CheckAds();
 
                                         String aid = MMKV.defaultMMKV().decodeString("aid");
                                         InfoBean infoBean = new InfoBean(aid,"Practice Native","AdsClicked",ADMOB_AD_Native_ID,"","","","","","","","","");
@@ -453,6 +458,7 @@ public class NativeAds {
                                         super.onAdImpression();
                                         //展示广告统计
                                         AdsShowCount(Native_Main_Ad_Impressions);
+                                        CheckAds();
                                     }
 
                                     @Override

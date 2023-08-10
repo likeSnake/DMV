@@ -8,6 +8,7 @@ import static net.ncie.dmv.ad.AdConst.isInitInterstitialShow;
 import static net.ncie.dmv.ad.AdCount.loadMainNativeAd;
 import static net.ncie.dmv.util.AdUtils.AdsClickCount;
 import static net.ncie.dmv.util.AdUtils.AdsShowCount;
+import static net.ncie.dmv.util.AdUtils.CheckAds;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -102,13 +103,13 @@ public class InterstitialAds {
                             public void onAdDismissedFullScreenContent() {
                                 // 取消广告
                                 MyUtil.MyLog("取消广告");
-
+                                mInterstitialAd = null;
                             //    isAdShowing = false;
                                 isInitInterstitialShow = false;
                                 //预加载广告
                            //     initInterstitialAds(context);
                                 onShowAdCompleteListeners.TurnoffAds();
-                                mInterstitialAd = null;
+
                             }
 
                             @Override
@@ -132,6 +133,8 @@ public class InterstitialAds {
 
                                 //展示广告统计
                                 AdsShowCount(Interstitial_Ad_Impressions);
+
+                                CheckAds();
                             }
 
                             @Override

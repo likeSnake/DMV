@@ -213,7 +213,8 @@ public class StartAct extends AppCompatActivity {
 
                 @Override
                 public void onAdClicked() {
-
+                    MyLog("刷新NativeAds");
+                    loadNativeAds();
                 }
 
                 @Override
@@ -223,7 +224,7 @@ public class StartAct extends AppCompatActivity {
             });
         }else {
             MyUtil.MyLog("Native_main免广告");
-
+            EventBus.getDefault().post(new MessageEvent("NativeAds免广告"));
         }
     }
 
@@ -266,4 +267,11 @@ public class StartAct extends AppCompatActivity {
                     }});
     }
 
+    @Override
+    public void onBackPressed() {
+        // 在这里添加你的逻辑代码
+        // 如果你希望返回键被忽略，可以直接return
+        // 如果你希望执行默认的返回操作，可以调用super.onBackPressed()
+        return;
+    }
 }

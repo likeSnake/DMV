@@ -20,17 +20,17 @@ public class  AdConst {
     public static Boolean isInitInterstitialShow = false;
 
     //广告展示最大次数
-    public static int All_Ad_Show_Max = 100;
-    public static int Open_Ad_Show_Max = 10;
-    public static int Native_main_Show_Max = 20;
-    public static int Native_Testing_Show_Max = 50;
-    public static int Native_result_Show_Max = 10;
-    public static int Interstitial_Show_Max = 10;
-    public static int Testing_Ad_Interval = 8;
-    public static int Testing_Ad_Native = 8;
+    public static int All_Ad_Show_Max = Integer.MAX_VALUE;
+    public static int Open_Ad_Show_Max = Integer.MAX_VALUE;
+    public static int Native_main_Show_Max = Integer.MAX_VALUE;
+    public static int Native_Testing_Show_Max = Integer.MAX_VALUE;
+    public static int Native_result_Show_Max = Integer.MAX_VALUE;
+    public static int Interstitial_Show_Max = Integer.MAX_VALUE;
+    public static int Testing_Ad_Interval = Integer.MAX_VALUE;
+    public static int Testing_Ad_Native = Integer.MAX_VALUE;
 
     //广告点击最大次数
-    public static int All_Clicks_Max = Integer.MAX_VALUE;
+    public static int All_Clicks_Max = 10;
     public static int Open_Clicks_Max = Integer.MAX_VALUE;
     public static int Native_main_Clicks_Max = Integer.MAX_VALUE;
     public static int Native_Testing_Clicks_Max = Integer.MAX_VALUE;
@@ -67,7 +67,7 @@ public class  AdConst {
     public static String Native_Node_Ad_Impressions = "Native_Node_Ad_Impressions";
     public static String Native_Result_Ad_Impressions = "Native_Result_Ad_Impressions";
     public static String Native_Main_Ad_Clicks = "Native_Main_Ad_Clicks";
-    public static String Native_Node_Ad_Clicks = "Native_Main_Ad_Clicks";
+    public static String Native_Testing_Ad_Clicks = "Native_Main_Ad_Clicks";
     public static String Native_Result_Ad_Clicks = "Native_Main_Ad_Clicks";
 
     public static String Interstitial_Ad_Impressions = "Interstitial_Ad_Impressions";
