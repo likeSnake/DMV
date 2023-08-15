@@ -248,13 +248,17 @@ public class StartAct extends AppCompatActivity {
                             String string12 = remoteConfig.getString(Fire_Testing_Ad_Interval);
                             if (!string12.equals("")){
                                 MyLog("FireBase Testing_Ad_Interval次数"+string12);
+                                MMKV.defaultMMKV().encode(Fire_Testing_Ad_Interval,string12);
                                 Testing_Ad_Interval = Integer.parseInt(string12);
+                              //  Testing_Ad_Interval = 5;
                             }
 
                             String Ad_Native = remoteConfig.getString(Fire_Testing_Ad_Native);
-                            if (!string12.equals("")){
-                                MyLog("FireBase Testing_Ad_Native次数"+string12);
+                            if (!Ad_Native.equals("")){
+                                MyLog("FireBase Testing_Ad_Native次数"+Ad_Native);
+                                MMKV.defaultMMKV().encode(Fire_Testing_Ad_Native,Ad_Native);
                                 Testing_Ad_Native = Integer.parseInt(Ad_Native);
+                                //Testing_Ad_Native = 4;
                             }
 
 

@@ -5,6 +5,8 @@ import static net.ncie.dmv.ad.AdConst.Interstitial_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Native_Testing_Ad_Switch;
 import static net.ncie.dmv.ad.AdConst.Testing_Ad_Interval;
 import static net.ncie.dmv.ad.AdConst.Testing_Ad_Native;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Testing_Ad_Interval;
+import static net.ncie.dmv.ad.FireBaseConst.Fire_Testing_Ad_Native;
 import static net.ncie.dmv.ad.NativeAds.adViewTesting;
 import static net.ncie.dmv.constant.MyAppApiConfig.AllState;
 import static net.ncie.dmv.constant.MyAppApiConfig.ImageUrl;
@@ -249,6 +251,13 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
 
         if (MMKV.defaultMMKV().decodeString(SelectCar)!=null){
             car = MMKV.defaultMMKV().decodeString(SelectCar);
+
+        }
+        if (MMKV.defaultMMKV().decodeString(Fire_Testing_Ad_Interval)!=null){
+
+        }
+
+        if (MMKV.defaultMMKV().decodeString(Fire_Testing_Ad_Native)!=null){
 
         }
 
@@ -605,12 +614,13 @@ public class TestingAct extends AppCompatActivity implements View.OnClickListene
                             if (currentTest+1 != topicBean.getResult().size()) {
                                 isDisable = true;
                                 currentTest++;
-                                MyUtil.MyLog("Testing_Ad_Interval--"+Testing_Ad_Interval);
+                                MyUtil.MyLog("Testing_Ad_Interval间隔--"+Testing_Ad_Interval);
                                 if ((currentTest+1)%Testing_Ad_Interval==0){
                                     isAds = true;
                                     startInterstitialAd(true,"Practice");
                                   //  startInterstitialAds(this);
                                 }
+                                MyUtil.MyLog("原生广告间隔间隔--"+Testing_Ad_Native);
                                 if ((currentTest+1)%Testing_Ad_Native==0){
                                     startNativeAds();
                                 }

@@ -26,8 +26,8 @@ public class  AdConst {
     public static int Native_Testing_Show_Max = Integer.MAX_VALUE;
     public static int Native_result_Show_Max = Integer.MAX_VALUE;
     public static int Interstitial_Show_Max = Integer.MAX_VALUE;
-    public static int Testing_Ad_Interval = Integer.MAX_VALUE;
-    public static int Testing_Ad_Native = Integer.MAX_VALUE;
+    public static int Testing_Ad_Interval = 8;
+    public static int Testing_Ad_Native = 8;
 
     //广告点击最大次数
     public static int All_Clicks_Max = 10;
