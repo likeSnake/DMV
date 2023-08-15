@@ -237,38 +237,39 @@ public class StartAct extends AppCompatActivity {
                 .build();
         remoteConfig.setConfigSettingsAsync(configSettings);*/
 
-
-        remoteConfig.fetch()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        remoteConfig.fetchAndActivate()
+                .addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            remoteConfig.activate();
+                    public void onComplete(@NonNull Task<Boolean> task) {
+                            if (task.isSuccessful()) {
+                                remoteConfig.activate();
 
-                            String string12 = remoteConfig.getString(Fire_Testing_Ad_Interval);
-                            if (!string12.equals("")){
-                                MyLog("FireBase Testing_Ad_Interval次数"+string12);
-                                MMKV.defaultMMKV().encode(Fire_Testing_Ad_Interval,string12);
-                                Testing_Ad_Interval = Integer.parseInt(string12);
-                              //  Testing_Ad_Interval = 5;
+                                String string12 = remoteConfig.getString(Fire_Testing_Ad_Interval);
+                                if (!string12.equals("")){
+                                    MyLog("FireBase Testing_Ad_Interval次数"+string12);
+                                    MMKV.defaultMMKV().encode(Fire_Testing_Ad_Interval,string12);
+                                    Testing_Ad_Interval = Integer.parseInt(string12);
+                                    //  Testing_Ad_Interval = 5;
+                                }
+
+                                String Ad_Native = remoteConfig.getString(Fire_Testing_Ad_Native);
+                                if (!Ad_Native.equals("")){
+                                    MyLog("FireBase Testing_Ad_Native次数"+Ad_Native);
+                                    MMKV.defaultMMKV().encode(Fire_Testing_Ad_Native,Ad_Native);
+                                    Testing_Ad_Native = Integer.parseInt(Ad_Native);
+                                    //Testing_Ad_Native = 4;
+                                }
+
+
+
+                                MyLog("Ad远程配置成功");
+                            }else {
+                                MyLog("Ad远程配置失败");
                             }
 
-                            String Ad_Native = remoteConfig.getString(Fire_Testing_Ad_Native);
-                            if (!Ad_Native.equals("")){
-                                MyLog("FireBase Testing_Ad_Native次数"+Ad_Native);
-                                MMKV.defaultMMKV().encode(Fire_Testing_Ad_Native,Ad_Native);
-                                Testing_Ad_Native = Integer.parseInt(Ad_Native);
-                                //Testing_Ad_Native = 4;
-                            }
+                    }
 
-
-
-                            MyLog("Ad远程配置成功");
-                        }else {
-                            MyLog("Ad远程配置失败");
-                        }
-
-                    }});
+            });
     }
 
     @Override

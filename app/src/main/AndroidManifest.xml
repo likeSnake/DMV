@@ -47,10 +47,10 @@
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="4110248749093419" />
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
-            android:value="@string/facebook_app_token" />
+            android:value="254becc482f2ff2cfb8e0f048df001cd" />
 
         <!--正式ID-->
         <meta-data

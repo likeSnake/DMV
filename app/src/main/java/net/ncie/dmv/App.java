@@ -19,6 +19,7 @@ import androidx.lifecycle.LifecycleOwner;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.firebase.FirebaseApp;
 import com.tencent.mmkv.MMKV;
 
 
@@ -47,7 +48,6 @@ public class App extends Application
         this.registerActivityLifecycleCallbacks(this);
         MMKV.initialize(this);
         initDate();
-
         initGoogleAds();
 
     }
@@ -63,7 +63,6 @@ public class App extends Application
         if (MMKV.defaultMMKV().decodeString("aid") == null) {
          //   MMKV.defaultMMKV().encode("aid", FileUtils.getSDDeviceTxt());
             MMKV.defaultMMKV().encode("aid", String.valueOf(UUID.randomUUID()));
-
 
             String aid = MMKV.defaultMMKV().decodeString("aid");
             InfoBean infoBean = new InfoBean(aid,"First Open","FirstOpen","","","","","","","","","","");
