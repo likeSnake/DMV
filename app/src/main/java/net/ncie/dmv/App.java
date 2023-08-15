@@ -63,13 +63,21 @@ public class App extends Application
         if (MMKV.defaultMMKV().decodeString("aid") == null) {
          //   MMKV.defaultMMKV().encode("aid", FileUtils.getSDDeviceTxt());
             MMKV.defaultMMKV().encode("aid", String.valueOf(UUID.randomUUID()));
+
+
+            String aid = MMKV.defaultMMKV().decodeString("aid");
+            InfoBean infoBean = new InfoBean(aid,"First Open","FirstOpen","","","","","","","","","","");
+
+            loadMainNativeAd(this,infoBean);
+        }else {
+
+            String aid = MMKV.defaultMMKV().decodeString("aid");
+            InfoBean infoBean = new InfoBean(aid,"First Open","LaunchApp","","","","","","","","","","");
+
+            loadMainNativeAd(this,infoBean);
         }
 
 
-        String aid = MMKV.defaultMMKV().decodeString("aid");
-        InfoBean infoBean = new InfoBean(aid,"First Open","LaunchApp","","","","","","","","","","");
-
-        loadMainNativeAd(this,infoBean);
 
     }
     //初始化google ads
